@@ -90,9 +90,7 @@ void GGPlaneAnimation::WriteGGPlaneAnimationHeaderFile(const std::string& output
     headerfile << "\n";
 
 	// includes
-    headerfile << "#include <genesis.h>\n";
-    headerfile << "#include \"engine\\GGAnimationDraw.h\"\n";
-    headerfile << "#include \"engine\\vdptypes.h\"\n";
+    headerfile << "#include \"GGAnimationTypes.h\"\n";
     headerfile << "\n";
 
 	// exported types

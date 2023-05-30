@@ -72,9 +72,7 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     headerfile << "\n";
 
 	// includes
-    headerfile << "#include <genesis.h>\n";
-    headerfile << "#include \"engine\\GGAnimationDraw.h\"\n";
-    headerfile << "#include \"engine\\vdptypes.h\"\n";
+    headerfile << "#include \"GGAnimationTypes.h\"\n";
     headerfile << "\n";
 
 	// exported types
