@@ -106,7 +106,7 @@ void CloseGaleFile()
 
 int main(int argc, char* argv[])
 {
-    printf("Graphics Gale to C exporter by pw_32x.\n");
+    printf("gg2c.exe Graphics Gale to C exporter by pw_32x. https://github.com/pw32x/gg2c\n");
 
 	ValidateArguments(argv);
 	OpenGaleFile();
