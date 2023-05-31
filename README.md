@@ -6,7 +6,7 @@ gg2c is a command line tool that exports 16 color (4 bits per pixel) Graphics Ga
 Works with 16 color images only
 
 
-# Export options
+# Export Options
 
 There are different options when exporting Graphics Gale file to C source files. Options are specified as part of the source Graphic Gale's filename.
 
@@ -20,3 +20,10 @@ There are different options when exporting Graphics Gale file to C source files.
  * planeanim: specifies that the animation doesn't use sprites, but is meant to use background tiles and animate background planes.\
     Example: **backgrondanimation.planeanim.gal**
 
+# Per-Frame Options
+   
+   In Graphics Gale, you can set the name of individual frames. gg2c lets you use a few different names to enable different options. \
+   * Triggers. A frame of animation can have one or more triggers. A trigger is an id and some data. The only trigger currently supported is:
+       * FRAME_TRIGGER_SPAWN <X> <Y> : will fire a trigger with an XY position. 
+   * Anim Properties. Anim Properties are used to inform the exporter about certain settings. The only Anim Property currenly supports is:
+       * ANIMPROP_OFFSET <X> <Y> : sets the origin of the entire animation. Be default the origin is at the top left corner. This lets you specify somewhere else.
