@@ -1,5 +1,5 @@
 # gg2c
-gg2c is a command line tool that exports 16 color (4 bits per pixel) Graphics Gale files (.gal) to C source files. Used for Sega Genesis homebrew development.
+gg2c is a command line tool that exports 16 color (4 bits per pixel) Graphics Gale files (.gal) to C source files. It's been used for Sega Genesis homebrew development.
 
 # Limitations
 
