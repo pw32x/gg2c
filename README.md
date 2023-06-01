@@ -19,7 +19,9 @@ There are different options when exporting Graphics Gale file to C source files.
    Example: **font.sliceongrid8x8.cutslicesasframe.gal**
  * planeanim: specifies that the animation doesn't use sprites, but is meant to use background tiles and animate background planes.\
     Example: **backgrondanimation.planeanim.gal**
-
+# Examples
+   Examples can be found in the **testdata** folder
+   
 # Per-Frame Options
    
    In Graphics Gale, you can set the name of individual frames. gg2c lets you use a few different names to enable different options. \
@@ -27,3 +29,12 @@ There are different options when exporting Graphics Gale file to C source files.
        * FRAME_TRIGGER_SPAWN <X> <Y> : will fire a trigger with an XY position. 
    * Anim Properties. Anim Properties are used to inform the exporter about certain settings. The only Anim Property currenly supports is:
        * ANIMPROP_OFFSET <X> <Y> : sets the origin of the entire animation. Be default the origin is at the top left corner. This lets you specify somewhere else.
+
+# Loading Exported Tile Data to VDP
+   
+   In SGDK, use VDP_loadTileData like so:
+   VDP_loadTileData(myGGAnimation->allSpriteData, *vdpTileIndex, myGGAnimation->totalTiles, 1);
+   
+# Working with GGAnimations
+   
+   In the **types** folder, you'll find .C and .H files that'll help you work with GG Animations in your project. They've been ripped from my projects and removed of any game specific types so they might need a bit of bootstrapping to be useful.
