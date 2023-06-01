@@ -1,0 +1,7 @@
+#ifndef GG_FRAME_TRIGGERS
+#define GG_FRAME_TRIGGERS
+
+#define FRAME_TRIGGER_NONE		0
+#define FRAME_TRIGGER_SPAWN		1
+
+#endif

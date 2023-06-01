@@ -298,7 +298,7 @@ void GGAnimation::WriteGGAnimationSourceFile(const std::string& outputFolder, co
     // includes
     sourceFile << "#include <genesis.h>\n";
     sourceFile << "#include \"" << outputName << ".h\"\n";
-	sourceFile << "#include \"engine\\GGFrameTriggers.h\"\n";
+	sourceFile << "#include \"GGFrameTriggers.h\"\n";
 	
     sourceFile << "\n";
     sourceFile << "\n";
