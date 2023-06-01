@@ -17,14 +17,14 @@ There are different options when exporting Graphics Gale file to C source files.
    Example: **explosion.sliceongrid16x16.gal**
 * **cutsliceasframe** : used in coordination with sliceongrid, it tells the exporter to take the sliced sprites and export them as frames. For example, a font texture might be stored on just one frame, but you want each letter to be exported as individual frames.\
    Example: **font.sliceongrid8x8.cutslicesasframe.gal**
- * **planeanim**: specifies that the animation doesn't use sprites, but is meant to use background tiles and animate background planes.\
+ * **planeanim**: specifies that the animation is intented to animate background planes using tiles. For very large animations that can use a plane instead of sprites. \
     Example: **backgrondanimation.planeanim.gal**
 # Examples
    Examples can be found in the **testdata** folder
    
 # Per-Frame Options
    
-   In Graphics Gale per-frame properties:
+   In Graphics Gale, you can use frame properties for per-frame tweaks:
    
    * gg2c supports the Delay option. it exports the delay value per-frame.\
    \
@@ -32,7 +32,7 @@ There are different options when exporting Graphics Gale file to C source files.
    * Triggers. A frame of animation can have one or more triggers. A trigger is an id and some data. The only trigger currently supported is:
        * **FRAME_TRIGGER_SPAWN X Y** : will fire a trigger with an XY position. 
    * Anim Properties. Anim Properties are used to inform the exporter about certain settings. The only Anim Property currenly supports is:
-       * **ANIMPROP_OFFSET X Y** : sets the origin of the entire animation. Be default the origin is at the top left corner. This lets you specify somewhere else.
+       * **ANIMPROP_OFFSET X Y** : sets the origin of the entire animation. By default the origin is at the top left corner. This lets you specify somewhere else.
 
 # Loading Exported Tile Data to VDP
    
