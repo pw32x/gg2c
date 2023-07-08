@@ -166,15 +166,15 @@ void GGPlaneAnimation::WriteFrameData(const std::string& outputName, std::ofstre
 }
 
 
-std::string BuildFrameDrawFunctionName(const std::string outputName, int index)
+std::string BuildFrameTileMapName(const std::string outputName, int index)
 {
     std::stringstream stringStream;
-    stringStream << outputName << "DrawFunction" << index;
+    stringStream << outputName << "TileMap" << index;
 
     return stringStream.str();
 }
 
-void GGPlaneAnimation::WriteFunctions(const std::string& outputName, std::ofstream& sourceFile)
+void GGPlaneAnimation::WriteTileMaps(const std::string& outputName, std::ofstream& sourceFile)
 {
 	for (size_t frameLoop = 0; frameLoop < m_uniqueFrameData.size(); frameLoop++)
 	{
@@ -185,118 +185,20 @@ void GGPlaneAnimation::WriteFunctions(const std::string& outputName, std::ofstre
 		auto height = frame->tileHeight();
 		auto frameData = frame->frameData();
 
-		sourceFile << "void " << BuildFrameDrawFunctionName(outputName, frameLoop) << "(u16 plan, u16 x, u16 y, u16 tileIndex)\n";
+		sourceFile << "const u16 " << BuildFrameTileMapName(outputName, frameLoop) << "[" << width << " * " << height << "] = \n";
         sourceFile << "{\n";
 
-        sourceFile << "    vu32 *plctrl;\n";
-        sourceFile << "    vu16 *pwdata;\n";
-		sourceFile << "    u32 planwidth;\n";
-		sourceFile << "    u32 addr;\n";
-        sourceFile << "\n";
-        sourceFile << "    VDP_setAutoInc(2);\n";
-        sourceFile << "\n";
-        sourceFile << "    /* point to vdp port */\n";
-        sourceFile << "    plctrl = (u32 *) GFX_CTRL_PORT;\n";
-        sourceFile << "    pwdata = (u16 *) GFX_DATA_PORT;\n";
-
-		sourceFile << "    planwidth = VDP_getPlanWidth();\n";
-
-		sourceFile << "    addr = plan + ((x + (planwidth * y)) << 1);\n";
-		sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-
-		for (size_t loop = 0; loop < frameData.size(); loop++)
+		for (int loopy = 0; loopy < frame->tileHeight(); loopy++)
 		{
-			auto tileValue = frameData[loop];
-
-			if (tileValue > 0)
+			sourceFile << "    ";
+			for (int loopx = 0; loopx < frame->tileWidth(); loopx++)
 			{
-				sourceFile << "    *pwdata = " << tileValue << " + tileIndex;\n";
+				auto tileValue = frameData[loopx + (loopy * frame->tileWidth())];
+				sourceFile << tileValue << ", ";
 			}
-			else
-				sourceFile << "    *pwdata = 0;\n";
 
-			if ((loop + 1) % width == 0 && loop < frameData.size() - 1)
-			{
-				sourceFile << "    addr += PLANE_WIDTH << 1;\n";
-				sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-			}
+			sourceFile << "\n";
 		}
-
-		/*
-		// exports the animation, without empty tiles and without 
-		// erasing the previous frame.
-		int addrOffset = 0;
-		int lastValue = -1;
-
-		for (size_t loop = 0; loop < frameData.size(); loop++)
-		{
-			auto tileValue = frameData[loop];
-
-			if (lastValue != tileValue && lastValue == 0)
-			{
-				sourceFile << "    addr += " << addrOffset << " << 1;\n";
-				sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-				addrOffset = 0;
-			}
-
-			if (tileValue != 0)
-			{
-				sourceFile << "    *pwdata = " << tileValue << " + tileIndex;\n";
-			}				
-
-			lastValue = tileValue;
-			addrOffset++;
-
-			if ((loop + 1) % width == 0)
-			{
-				addrOffset += 64 - width;
-
-				if (lastValue > 0)
-				{
-					sourceFile << "    addr += " << addrOffset << " << 1;\n";
-					sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-					addrOffset = 0;
-				}
-			}
-		}
-		*/
-
-		/*
-		for (int yloop = 0; yloop < height; yloop++)
-		{
-			sourceFile << "\n// line " << yloop << "\n";
-
-			sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-
-			int storedZeros = 0;
-
-			for (int xloop = 0; xloop < width; xloop++)			
-			{
-				auto tileValue = frameData[xloop + (width * yloop)];
-
-				if (tileValue > 0)
-				{
-					if (storedZeros)
-					{ 
-						//sourceFile << "    *pwdata = 0;\n";
-						sourceFile << "    addr += " << storedZeros << " << 1;\n";
-						sourceFile << "    *plctrl = GFX_WRITE_VRAM_ADDR(addr);\n";
-						storedZeros = 0;
-					}
-					sourceFile << "    *pwdata = " << tileValue << " + tileIndex;\n";
-				}
-				else
-				{
-					storedZeros++;
-				}
-			}
-
-			if (storedZeros > 0 && storedZeros < width)
-				sourceFile << "    addr += (planwidth - " << storedZeros << ") << 1;\n";
-			else
-				sourceFile << "    addr += planwidth << 1;\n";
-		}
-		*/
 
         sourceFile << "}\n\n";
 	}
@@ -333,7 +235,7 @@ void GGPlaneAnimation::WriteFrames(const std::string& outputName, std::ofstream&
 		sourceFile << "{\n";
 
 		int uniqueFrameIndex = findSameFrameIndex(frame);
-		sourceFile << "    " << BuildFrameDrawFunctionName(outputName, uniqueFrameIndex) << ", // frame drawing function\n";
+		sourceFile << "    " << BuildFrameTileMapName(outputName, uniqueFrameIndex) << ", // frame tilemap\n";
 		sourceFile << "    " << frame.getFrameDelayTime() << ", // frame time\n"; 
 
 		if (loop + 1 > m_frames.size() - 1)
@@ -429,7 +331,7 @@ void GGPlaneAnimation::WriteGGPlaneAnimationSourceFile(const std::string& output
 	WriteTileData(outputName, sourceFile, m_tiles);
 
 	//WriteFrameData(outputName, sourceFile);
-	WriteFunctions(outputName, sourceFile);
+	WriteTileMaps(outputName, sourceFile);
 	WriteFrameNames(outputName, sourceFile);
 	WriteFrames(outputName, sourceFile);
 

@@ -25,7 +25,7 @@ private:
 	void WriteGGPlaneAnimationSourceFile(const std::string& outputFolder, const std::string& outputName);
 	void WriteFrameData(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrameNames(const std::string& outputName, std::ofstream& sourceFile);
-	void WriteFunctions(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteTileMaps(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrames(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrameArray(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile);
