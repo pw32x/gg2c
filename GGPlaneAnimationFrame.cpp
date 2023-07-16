@@ -3,6 +3,7 @@
 #include "BitmapUtils.h"
 #include "SpriteUtils.h"
 #include <set>
+#include "palette.h"
 
 GGPlaneAnimationFrame::GGPlaneAnimationFrame()
 : m_FrameDelayTime(-1),
@@ -21,6 +22,10 @@ void GGPlaneAnimationFrame::Init(int frameNumber,
 	m_FrameNumber = frameNumber;
 	GetFrameDelayTime(galeFile);
 	BuildFrame(galeFile, tiles, options, uniqueTileCount, maxUniqueTileCountPerFrame);
+
+	HPALETTE palette = ggGetPalette(galeFile, m_FrameNumber);
+
+	GetPaletteData(palette, m_palette);
 }
 
 void GGPlaneAnimationFrame::GetFrameDelayTime(LPVOID galeFile)

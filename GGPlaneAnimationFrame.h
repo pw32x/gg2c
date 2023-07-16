@@ -7,6 +7,8 @@
 
 typedef RawSprite Tile;
 
+#define PALETTE_SIZE 16
+
 class GGPlaneAnimationFrame
 {
 public:
@@ -21,6 +23,8 @@ public:
 
 	bool hasSameFrameData(const GGPlaneAnimationFrame* frame);
 
+	const PALETTEENTRY* getPalette() const { return m_palette; } 
+
 private:
 	void GetFrameDelayTime(LPVOID galeFile);
 	void BuildFrame(LPVOID galeFile, std::vector<Tile>& tiles, const Options& options, int& uniqueTileCount, int& maxUniqueTileCountPerFrame);
@@ -32,4 +36,6 @@ private:
 	std::vector<unsigned short> m_frame;
 	int							m_tileWidth;
 	int							m_tileHeight;
+
+	PALETTEENTRY				m_palette[PALETTE_SIZE];
 };

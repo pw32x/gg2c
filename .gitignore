@@ -54,6 +54,9 @@ nunit-*.xml
 [Rr]eleasePS/
 dlldata.c
 
+#don't include temp folder
+temp/
+
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
