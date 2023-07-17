@@ -223,7 +223,7 @@ void GGPlaneAnimation::WriteTileMaps(const std::string& outputName, std::ofstrea
 		auto height = frame->tileHeight();
 		auto frameData = frame->frameData();
 
-		sourceFile << "const unsigned short " << BuildFrameTileMapName(outputName, frameLoop) << "[" << width << " * " << height << "] = \n";
+		sourceFile << "const unsigned short " << BuildFrameTileMapName(outputName, frameLoop) << "[" << std::dec << width << " * " << height << "] = \n";
         sourceFile << "{\n";
 
 		for (int loopy = 0; loopy < frame->tileHeight(); loopy++)
@@ -232,13 +232,13 @@ void GGPlaneAnimation::WriteTileMaps(const std::string& outputName, std::ofstrea
 			for (int loopx = 0; loopx < frame->tileWidth(); loopx++)
 			{
 				auto tileValue = frameData[loopx + (loopy * frame->tileWidth())];
-				sourceFile << tileValue << ", ";
+				sourceFile << "0x" << std::hex << tileValue << ", ";
 			}
 
 			sourceFile << "\n";
 		}
 
-        sourceFile << "}\n\n";
+        sourceFile << std::dec << "};\n\n";
 	}
 }
 

@@ -120,7 +120,7 @@ void WriteTileData(const std::string& outputName, std::ofstream& sourceFile, con
 
     int tileIndex = 0;
     int totalTiles = 0;
-    sourceFile << "unsigned short const " << outputTileDataName << "[" << sprites.size() << "] = \n";
+    sourceFile << "unsigned short const " << outputTileDataName << "[" << sprites.size() * 16 << "] = \n";
     sourceFile << "{\n";
 
 	WriteIndividualTileData(sourceFile, sprites);
