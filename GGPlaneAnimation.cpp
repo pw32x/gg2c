@@ -183,6 +183,37 @@ std::string BuildFramePaletteName(const std::string outputName, int index)
     return stringStream.str();
 }
 
+unsigned short getClosestBrightness(BYTE channel)
+{
+	//if (channel >= 255) return 7;
+	//if (channel >= 206) return 6;
+	//if (channel >= 172) return 5;
+	//if (channel >= 144) return 4;
+	//if (channel >= 116) return 3;
+	//if (channel >= 87) return 2;
+	//if (channel >= 52) return 1;
+	//return 0;
+
+	//if (channel >= 206) return 7;
+	//if (channel >= 172) return 6;
+	//if (channel >= 144) return 5;
+	//if (channel >= 116) return 4;
+	//if (channel >= 87) return 3;
+	//if (channel >= 52) return 2;
+	//if (channel > 0) return 1;
+	//return 0;
+
+
+	if (channel >= 255) return 7;
+	if (channel >= 206) return 6;
+	if (channel >= 172) return 5;
+	if (channel >= 144) return 4;
+	if (channel >= 116) return 3;
+	if (channel >= 87) return 2;
+	if (channel >= 52) return 1;
+	return 0;
+}
+
 void GGPlaneAnimation::WritePalettes(const std::string& outputName, std::ofstream& sourceFile)
 {
 	for (size_t frameLoop = 0; frameLoop < m_uniqueFrameData.size(); frameLoop++)
@@ -200,9 +231,20 @@ void GGPlaneAnimation::WritePalettes(const std::string& outputName, std::ofstrea
 		{
 			const PALETTEENTRY* paletteEntry = &paletteEntries[loop];
 
-			unsigned short red = (unsigned short)((float)paletteEntry->peRed / 256 * 8);
-			unsigned short green = (unsigned short)((float)paletteEntry->peGreen / 256 * 8);
-			unsigned short blue = (unsigned short)((float)paletteEntry->peBlue / 256 * 8);
+			// Which RGB to Genesis color conversion is best????
+
+			//unsigned short red = (unsigned short)((float)paletteEntry->peRed / 256.0f * 8);
+			//unsigned short green = (unsigned short)((float)paletteEntry->peGreen / 256.0f * 8);
+			//unsigned short blue = (unsigned short)((float)paletteEntry->peBlue / 256.0f * 8);
+
+
+			//unsigned short red = (unsigned short)((float)paletteEntry->peRed / 255.0f * 7);
+			//unsigned short green = (unsigned short)((float)paletteEntry->peGreen / 255.0f * 7);
+			//unsigned short blue = (unsigned short)((float)paletteEntry->peBlue / 255.0f * 7);
+
+			unsigned short red = getClosestBrightness(paletteEntry->peRed);
+			unsigned short green = getClosestBrightness(paletteEntry->peGreen);
+			unsigned short blue = getClosestBrightness(paletteEntry->peBlue);
 			unsigned short paletteValue = (unsigned short)((red << 1) | (green << 5) | (blue << 9));
 
 			sourceFile << "    0x" << std::hex << paletteValue << ", \n";
