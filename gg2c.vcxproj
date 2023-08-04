@@ -146,6 +146,8 @@
     <ClCompile Include="GGAnimationFrame.cpp" />
     <ClCompile Include="GGPlaneAnimation.cpp" />
     <ClCompile Include="GGPlaneAnimationFrame.cpp" />
+    <ClCompile Include="GGSMSAnimation.cpp" />
+    <ClCompile Include="GGSMSAnimationFrame.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="palette.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -161,6 +163,8 @@
     <ClInclude Include="GGAnimationFrame.h" />
     <ClInclude Include="GGPlaneAnimation.h" />
     <ClInclude Include="GGPlaneAnimationFrame.h" />
+    <ClInclude Include="GGSMSAnimation.h" />
+    <ClInclude Include="GGSMSAnimationFrame.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="palette.h" />
     <ClInclude Include="Sprite.h" />

@@ -284,13 +284,6 @@ void GGPlaneAnimation::WriteTileMaps(const std::string& outputName, std::ofstrea
 	}
 }
 
-std::string BuildFrameName(const std::string outputName, int frameNumber)
-{
-    std::stringstream stringStream;
-    stringStream << outputName << "Frame" << frameNumber;
-
-    return stringStream.str();
-}
 
 void GGPlaneAnimation::WriteFrameNames(const std::string& outputName, std::ofstream& sourceFile)
 {

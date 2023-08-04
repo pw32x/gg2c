@@ -6,6 +6,7 @@
 #include <string>
 #include "GGAnimation.h"
 #include "GGPlaneAnimation.h"
+#include "GGSMSAnimation.h"
 #include "Options.h"
 #include "AnimationProperties.h"
 #include "Shlwapi.h"
@@ -22,13 +23,25 @@ DWORD							gTotalNumberOfTiles = 0;
 Options							gOptions;
 AnimationProperties				gAnimationProperties;
 
+void parseOptionalParameter(const std::string& parameter)
+{
+    if (parameter == "-sms")
+    {
+        gOptions.mExportToSMSFormat = true;
+    }
+    else
+    {
+        gOutputFolder = parameter;
+        gOutputFolder += "\\";
+    }
+}
 
 void ValidateArguments(char* argv[])
 {
     if (argv[1] == NULL)
     {
         printf("No Graphics Gale file specified\n");
-        printf("\ngale2c.exe [input .gal file] [optional_destination_folder]\n");
+        printf("\ngale2c.exe [input .gal file] [optional_destination_folder] [-sms]\n");
 		exit(-1);
     }
 
@@ -52,8 +65,12 @@ void ValidateArguments(char* argv[])
 
     if (argv[2] != NULL)
     {
-        gOutputFolder = argv[2];
-        gOutputFolder += "\\";
+        parseOptionalParameter(argv[2]);
+    }
+
+    if (argv[3] != NULL)
+    {
+        parseOptionalParameter(argv[3]);
     }
 }
 
@@ -113,16 +130,24 @@ int main(int argc, char* argv[])
 
 	gOptions.ProcessOptions(gGaleFilename);
 
-	if (gOptions.mBackgroundPlaneAnimation)
-	{
-		GGPlaneAnimation animation(gGaleFileHandle, gOptions);
+    if (gOptions.mExportToSMSFormat)
+    {
+        sms::GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
 		animation.Write(gOutputFolder, gOutputName);
-	}
-	else
-	{
-		GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
-		animation.Write(gOutputFolder, gOutputName);
-	}
+    }
+    else
+    {
+	    if (gOptions.mBackgroundPlaneAnimation)
+	    {
+		    GGPlaneAnimation animation(gGaleFileHandle, gOptions);
+		    animation.Write(gOutputFolder, gOutputName);
+	    }
+	    else
+	    {
+		    GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
+		    animation.Write(gOutputFolder, gOutputName);
+	    }
+    }
 
 	CloseGaleFile();
 

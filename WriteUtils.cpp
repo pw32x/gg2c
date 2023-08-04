@@ -127,3 +127,28 @@ void WriteTileData(const std::string& outputName, std::ofstream& sourceFile, con
 
     sourceFile << "};\n\n";
 }
+
+std::string BuildFrameName(const std::string& outputName, int frameNumber)
+{
+    std::stringstream stringStream;
+    stringStream << outputName << "Frame" << frameNumber;
+
+    return stringStream.str();
+}
+
+std::string BuildSpriteArrayName(const std::string& outputName, int index)
+{
+    std::stringstream stringStream;
+    stringStream << outputName << "SpriteArray" << index;
+
+    return stringStream.str();
+}
+
+
+std::string BuildSpriteName(const std::string outputName, int spritenumber)
+{
+    std::stringstream stringStream; 
+    stringStream << outputName << "Sprite" << spritenumber;
+
+    return stringStream.str();
+}

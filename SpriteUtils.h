@@ -13,7 +13,7 @@
 
 inline float myround(float val)
 {
-    return floor(val + 0.5f);
+    return (float)floor(val + 0.5f);
 }
 
 
@@ -23,7 +23,7 @@ bool SpritesAreIdentical(const RawSprite& rawSprite, const std::vector<BYTE>& sp
 bool SpritesAreMirroredOnX(const RawSprite& rawSprite, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight);
 bool SpritesAreMirroredOnY(const RawSprite& rawSprite, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight);
 bool SpritesAreMirroredOnXY(const RawSprite& rawSprite, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight);
-int FindRawSprite(const std::vector<RawSprite>& rawSprites, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight, bool& verticalFlip, bool& horizontalFlip);
+int FindRawSprite(const std::vector<RawSprite>& rawSprites, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight, bool checkFlipped, bool& verticalFlip, bool& horizontalFlip);
 int FindSpriteProperties(const std::vector<SpriteProperties>& spriteProperties, const SpriteProperties& properties);
 bool CopySpriteFromByteData(BYTE* byteData, int byteDataWidth, std::vector<BYTE>& spriteData, int& startPositionX, int& startPositionY, int& endPositionX, int& endPositionY, bool sliceOnGrid);
 void CopyTileFromByteData(BYTE* byteData, int byteDataWidth, int byteDataHeight, std::vector<BYTE>& tileData, int startPositionX, int startPositionY);

@@ -84,13 +84,6 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     headerfile.close();
 }
 
-std::string BuildSpriteName(const std::string outputName, int spritenumber)
-{
-    std::stringstream stringStream; 
-    stringStream << outputName << "Sprite" << spritenumber;
-
-    return stringStream.str();
-}
  
 
 void GGAnimation::WriteSpritesData(const std::string& outputName, std::ofstream& sourceFile)
@@ -115,13 +108,7 @@ void GGAnimation::WriteSpritesData(const std::string& outputName, std::ofstream&
 }
 
 
-std::string BuildSpriteArrayName(const std::string& outputName, int index)
-{
-    std::stringstream stringStream;
-    stringStream << outputName << "SpriteArray" << index;
 
-    return stringStream.str();
-}
 
 
 void GGAnimation::WriteFrameSpriteArrayData(const std::string& outputName, std::ofstream& sourceFile)
@@ -146,13 +133,7 @@ void GGAnimation::WriteFrameSpriteArrayData(const std::string& outputName, std::
 }
 
 
-std::string BuildFrameName(const std::string& outputName, int frameNumber)
-{
-    std::stringstream stringStream;
-    stringStream << outputName << "Frame" << frameNumber;
 
-    return stringStream.str();
-}
 
 
 void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sourceFile)

@@ -64,7 +64,7 @@ void GGPlaneAnimationFrame::BuildFrame(LPVOID galeFile, std::vector<Tile>& tiles
 			// See if the sprite already exists.
 			bool verticalFlip = false;
 			bool horizontalFlip = false;
-			int tileIndex = FindRawSprite(tiles, tileData, TILE_WIDTH, TILE_HEIGHT, verticalFlip, horizontalFlip);
+			int tileIndex = FindRawSprite(tiles, tileData, TILE_WIDTH, TILE_HEIGHT, true, verticalFlip, horizontalFlip);
 
 			if (tileIndex == -1)
 			{

@@ -12,24 +12,18 @@
     <Filter Include="Source Files\galefile151119">
       <UniqueIdentifier>{2cc6b724-da67-4765-8f7a-923ab43a020a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SegaMasterSystem">
+      <UniqueIdentifier>{e6077ed4-9f54-4e3c-8c9e-a97ce12f1577}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Genesis">
+      <UniqueIdentifier>{8e1cc27b-ebab-4fa7-8c0a-586f9eefccea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gg2c.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BitmapUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GGAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GGAnimationFrame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GGPlaneAnimation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GGPlaneAnimationFrame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Options.cpp">
@@ -53,24 +47,30 @@
     <ClCompile Include="palette.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GGAnimationFrame.cpp">
+      <Filter>Source Files\Genesis</Filter>
+    </ClCompile>
+    <ClCompile Include="GGPlaneAnimation.cpp">
+      <Filter>Source Files\Genesis</Filter>
+    </ClCompile>
+    <ClCompile Include="GGAnimation.cpp">
+      <Filter>Source Files\Genesis</Filter>
+    </ClCompile>
+    <ClCompile Include="GGPlaneAnimationFrame.cpp">
+      <Filter>Source Files\Genesis</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSAnimationFrame.cpp">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSAnimation.cpp">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationProperties.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="BitmapUtils.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GGAnimation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GGAnimationFrame.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GGPlaneAnimation.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GGPlaneAnimationFrame.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Options.h">
@@ -96,6 +96,24 @@
     </ClInclude>
     <ClInclude Include="palette.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GGAnimationFrame.h">
+      <Filter>Source Files\Genesis</Filter>
+    </ClInclude>
+    <ClInclude Include="GGPlaneAnimation.h">
+      <Filter>Source Files\Genesis</Filter>
+    </ClInclude>
+    <ClInclude Include="GGAnimation.h">
+      <Filter>Source Files\Genesis</Filter>
+    </ClInclude>
+    <ClInclude Include="GGPlaneAnimationFrame.h">
+      <Filter>Source Files\Genesis</Filter>
+    </ClInclude>
+    <ClInclude Include="GGSMSAnimationFrame.h">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GGSMSAnimation.h">
+      <Filter>Source Files\SegaMasterSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -150,7 +150,13 @@ bool SpritesAreMirroredOnXY(const RawSprite& rawSprite, const std::vector<BYTE>&
 }
 
 
-int FindRawSprite(const std::vector<RawSprite>& rawSprites, const std::vector<BYTE>& spriteData, int spriteWidth, int spriteHeight, bool& verticalFlip, bool& horizontalFlip)
+int FindRawSprite(const std::vector<RawSprite>& rawSprites, 
+				  const std::vector<BYTE>& spriteData, 
+				  int spriteWidth, 
+				  int spriteHeight, 
+				  bool checkFlipped,
+				  bool& verticalFlip, 
+				  bool& horizontalFlip)
 {
 	verticalFlip = false;
 	horizontalFlip = false;
@@ -170,6 +176,9 @@ int FindRawSprite(const std::vector<RawSprite>& rawSprites, const std::vector<BY
 			return loop;
 		} 
 		
+		if (!checkFlipped)
+			continue;
+
 		if (SpritesAreMirroredOnX(rawSprite, spriteData, spriteWidth, spriteHeight))
 		{
 			horizontalFlip = true;
@@ -457,7 +466,7 @@ void SliceImageIntoSprites(BYTE* byteData,
 			// See if the sprite already exists.
 			bool verticalFlip = false;
 			bool horizontalFlip = false;
-			int rawSpriteIndex = FindRawSprite(rawSprites, spriteData, spriteWidth, spriteHeight, verticalFlip, horizontalFlip);
+			int rawSpriteIndex = FindRawSprite(rawSprites, spriteData, spriteWidth, spriteHeight, true, verticalFlip, horizontalFlip);
 
 			if (rawSpriteIndex == -1)
 			{
