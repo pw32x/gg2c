@@ -7,7 +7,7 @@ Works with 16 color images only
 
 # Command Line
 
-gg2c <graphics gale file> <optional destination folder> <-sms>
+gg2c [graphics gale file] [optional destination folder] [-sms]
 
 the -sms flag exports the animation for the Sega Master System. Right now support is basic not all Export Options will be available for it.
 
