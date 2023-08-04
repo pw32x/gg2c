@@ -47,3 +47,6 @@ There are different options when exporting Graphics Gale file to C source files.
 # Working with GGAnimations
    
    In the **types** folder, you'll find .C and .H files that'll help you work with GG Animations in your project. They've been ripped from my projects and removed of any game specific types so they might need a bit of bootstrapping to be useful.
+
+# Contact
+Twitter @pw_32x
