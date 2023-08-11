@@ -218,8 +218,8 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     // final struct
     sourceFile << "const Animation " << outputName << " = \n";
     sourceFile << "{\n";
-    sourceFile << "    (const AnimationFrame* const)" << outputName << "Frames,\n";
-    sourceFile << "    (unsigned int*)" << outputName << "TileData, // start of the sprite data\n";
+    sourceFile << "    (const AnimationFrame** const)" << outputName << "Frames,\n";
+    sourceFile << "    (unsigned char* const)" << outputName << "TileData, // start of the sprite data\n";
     sourceFile << "    " << m_frames.size() << ", // number of frames\n";
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
