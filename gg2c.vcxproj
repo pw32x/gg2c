@@ -159,6 +159,7 @@
     <ClInclude Include="AnimationProperties.h" />
     <ClInclude Include="BitmapUtils.h" />
     <ClInclude Include="galefile151119\galefile.h" />
+    <ClInclude Include="gg2c.h" />
     <ClInclude Include="GGAnimation.h" />
     <ClInclude Include="GGAnimationFrame.h" />
     <ClInclude Include="GGPlaneAnimation.h" />

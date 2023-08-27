@@ -18,5 +18,6 @@ public:
 	bool mBackgroundPlaneAnimation;
 	bool mFixedBack; // hardcode the vdp position to the back.
 	bool mCutSliceAsFrame;
-	bool mExportToSMSFormat;
+	bool mExportToSMSFormat = false;
+	bool mUpdateOnly = false;
 };

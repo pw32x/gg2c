@@ -53,7 +53,7 @@ void GGAnimation::Write(const std::string& outputFolder, const std::string& outp
 void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName)
 {
 	std::string headerFilename = outputName + ".h";
-	std::ofstream headerfile(outputFolder + headerFilename);
+	std::ofstream headerfile(outputFolder + headerFilename, std::ios::trunc);
 
     // header guard
     std::string headerGuard = outputName + "_ANIMATION_INCLUDE_H";
@@ -64,7 +64,7 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     headerfile << "\n";
 
 	// includes
-    headerfile << "#include \"AnimationTypes.h\"\n";
+    headerfile << "#include \"animation_types.h\"\n";
     headerfile << "\n";
 
 	// exported types
@@ -220,10 +220,10 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     sourceFile << "{\n";
     sourceFile << "    (const AnimationFrame** const)" << outputName << "Frames,\n";
     sourceFile << "    (unsigned char* const)" << outputName << "TileData, // start of the sprite data\n";
+	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
     sourceFile << "    " << m_frames.size() << ", // number of frames\n";
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
-	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
     sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
 
     sourceFile << "};\n";

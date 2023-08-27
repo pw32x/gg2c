@@ -11,6 +11,7 @@
 #include "AnimationProperties.h"
 #include "Shlwapi.h"
 #include "windows.h"
+#include "gg2c.h"
 
 std::string						gOutputFolder;
 LPVOID							gGaleFileHandle = NULL;
@@ -30,6 +31,10 @@ void parseOptionalParameter(const std::string& parameter)
     {
         gOptions.mExportToSMSFormat = true;
     }
+    else if (parameter == "-updateonly")
+    {
+        gOptions.mUpdateOnly = true;
+    }
     else
     {
         gOutputFolder = parameter;
@@ -37,12 +42,12 @@ void parseOptionalParameter(const std::string& parameter)
     }
 }
 
-void ValidateArguments(char* argv[])
+void ValidateArguments(int argc, char* argv[])
 {
-    if (argv[1] == NULL)
+    if (argc < 2)
     {
         printf("No Graphics Gale file or folder specified\n");
-        printf("\ngale2c.exe [.gal file or folder] [optional_destination_folder] [-sms]\n");
+        printf("\ngale2c.exe [.gal file or folder] [optional_destination_folder] [-sms] [-updateonly]\n");
 		exit(-1);
     }
 
@@ -78,19 +83,14 @@ void ValidateArguments(char* argv[])
         } 
         else 
         {
-            printf("Folder %s not found.\n", fileOrPath.c_str());
-		    exit(-1);            
+            printf("No animations found in %s.\n", fileOrPath.c_str());
+		    exit(-1);
         }
     }
 
-    if (argv[2] != NULL)
+    for (int loop = 2; loop < argc; loop++)
     {
-        parseOptionalParameter(argv[2]);
-    }
-
-    if (argv[3] != NULL)
-    {
-        parseOptionalParameter(argv[3]);
+        parseOptionalParameter(argv[loop]);
     }
 }
 
@@ -141,11 +141,72 @@ void CloseGaleFile()
     }
 }
 
+FILETIME getLastWriteTime(const std::string& path)
+{
+    FILETIME lastWriteTime = {0};
+
+    HANDLE hFile = CreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (hFile != INVALID_HANDLE_VALUE) 
+    {
+        if (GetFileTime(hFile, NULL, NULL, &lastWriteTime)) 
+        {
+            SYSTEMTIME st;
+            FileTimeToSystemTime(&lastWriteTime, &st);
+        }
+    }
+
+    CloseHandle(hFile);
+
+    return lastWriteTime;
+}
+
+bool isNewer(FILETIME a, FILETIME b)
+{
+    if (CompareFileTime(&a, &b) > 0)
+        return true;
+
+    return false;
+}
+
+bool needsUpdate(const std::string& filename, const std::string& outputFolder, const std::string& outputFilename)
+{
+    // we need an update if the app or the filename is newer than the exported files.
+
+    char filePath[MAX_PATH];
+    DWORD size = GetModuleFileNameA(nullptr, filePath, MAX_PATH);
+
+    FILETIME appTime = getLastWriteTime(filePath);
+    FILETIME fileTime = getLastWriteTime(filename.c_str());
+
+    std::string sourceFilename = outputFolder + outputFilename + ".c";
+    FILETIME sourceTime = getLastWriteTime(sourceFilename.c_str());
+
+    std::string headerFilename = outputFolder + outputFilename + ".h";
+    FILETIME headerTime = getLastWriteTime(headerFilename.c_str());
+     
+    // if app or filename is newer than source and header, then update.    
+
+    if (isNewer(appTime, sourceTime))
+        return true;
+
+    if (isNewer(appTime, headerTime))
+        return true;
+
+    if (isNewer(fileTime, sourceTime))
+        return true;
+
+    if (isNewer(fileTime, headerTime))
+        return true;
+
+    return false;
+}
+
 int main(int argc, char* argv[])
 {
     printf("gg2c.exe Graphics Gale to C exporter by pw_32x. https://github.com/pw32x/gg2c\n");
 
-	ValidateArguments(argv);
+	ValidateArguments(argc, argv);
 
     for (auto& filename : gFilenames)
     {
@@ -167,6 +228,16 @@ int main(int argc, char* argv[])
 
         index = outputFilename.find(".");
         outputFilename = outputFilename.substr(0, index);
+
+        if (gOptions.mUpdateOnly && !needsUpdate(filename, gOutputFolder, outputFilename))
+        {
+            printf("%s is already up to date.\n", filename.c_str());
+            continue;
+        }
+        else
+        {
+            printf("Exporting %s \n", filename.c_str());
+        }
 
 	    gOptions.ProcessOptions(filename);
 
@@ -191,6 +262,8 @@ int main(int argc, char* argv[])
 
 	    CloseGaleFile();
     }
+
+    printf("done\n");
 
     return 0;
 }

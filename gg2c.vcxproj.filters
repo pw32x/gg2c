@@ -115,6 +115,7 @@
     <ClInclude Include="GGSMSAnimation.h">
       <Filter>Source Files\SegaMasterSystem</Filter>
     </ClInclude>
+    <ClInclude Include="gg2c.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="galefile151119\galefile.lib">
