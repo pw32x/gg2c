@@ -19,5 +19,6 @@ public:
 	bool mFixedBack; // hardcode the vdp position to the back.
 	bool mCutSliceAsFrame;
 	bool mExportToSMSFormat = false;
+	bool mSMS8x16Sprites = false;
 	bool mUpdateOnly = false;
 };

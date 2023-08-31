@@ -24,19 +24,27 @@ void Options::ProcessOptions(const std::string& filename)
 
 	if (mSliceSpritesOnGrid)
 	{
-		int widthStartIndex = sliceOnGridIndex + strlen(sliceOnGridName);
-		int widthEndIndex = filename.find('x', widthStartIndex);
+		if (mExportToSMSFormat)
+		{
+			mSliceWidth = 8;
+			mSliceHeight = 8;
+		}
+		else
+		{
+			int widthStartIndex = sliceOnGridIndex + strlen(sliceOnGridName);
+			int widthEndIndex = filename.find('x', widthStartIndex);
 
-		std::string widthString = filename.substr(widthStartIndex, widthEndIndex - widthStartIndex);
+			std::string widthString = filename.substr(widthStartIndex, widthEndIndex - widthStartIndex);
 
-		mSliceWidth = std::atoi(widthString.c_str());
+			mSliceWidth = std::atoi(widthString.c_str());
 
-		int heightStartIndex = widthEndIndex + 1;
-		int heightEndIndex = filename.find('.', heightStartIndex);
+			int heightStartIndex = widthEndIndex + 1;
+			int heightEndIndex = filename.find('.', heightStartIndex);
 
-		std::string heightString = filename.substr(heightStartIndex, heightEndIndex - heightStartIndex);
+			std::string heightString = filename.substr(heightStartIndex, heightEndIndex - heightStartIndex);
 
-		mSliceHeight = std::atoi(heightString.c_str());
+			mSliceHeight = std::atoi(heightString.c_str());
+		}
 	}
 
 
@@ -45,4 +53,13 @@ void Options::ProcessOptions(const std::string& filename)
 	mFixedBack = (filename.find(".fixedback.") != std::string::npos);
 
 	mCutSliceAsFrame = (filename.find(".cutsliceasframe.") != std::string::npos);
+
+	mSMS8x16Sprites = (filename.find(".sms8x16.") != std::string::npos);
+
+	if (mSMS8x16Sprites)
+	{
+		//mSliceSpritesOnGrid = true;
+		mSliceWidth = 8;
+		mSliceHeight = 16;
+	}
 }

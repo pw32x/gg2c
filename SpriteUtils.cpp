@@ -312,6 +312,7 @@ bool CopySpriteFromByteData(BYTE* byteData,
 
 
 	spriteData.resize(spriteWidth * spriteHeight);
+	std::fill(spriteData.begin(), spriteData.end(), 0);
 
     int j = 0;
 

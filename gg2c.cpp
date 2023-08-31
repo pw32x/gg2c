@@ -11,7 +11,6 @@
 #include "AnimationProperties.h"
 #include "Shlwapi.h"
 #include "windows.h"
-#include "gg2c.h"
 
 std::string						gOutputFolder;
 LPVOID							gGaleFileHandle = NULL;
