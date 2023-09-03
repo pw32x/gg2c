@@ -20,5 +20,6 @@ public:
 	bool mCutSliceAsFrame;
 	bool mExportToSMSFormat = false;
 	bool mSMS8x16Sprites = false;
+	bool mSMSBatchedSprites = false;
 	bool mUpdateOnly = false;
 };

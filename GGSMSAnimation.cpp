@@ -68,7 +68,13 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     headerfile << "\n";
 
 	// exported types
-    headerfile << "extern const Animation " << outputName << ";\n"; 
+
+    if (m_options.mSMSBatchedSprites)
+        headerfile << "extern const AnimationBatched " << outputName << ";\n"; 
+    else
+        headerfile << "extern const Animation " << outputName << ";\n"; 
+
+
     headerfile << "\n";
 
     // end header guard
@@ -181,6 +187,51 @@ void GGAnimation::WriteSprites(const std::string& outputName, std::ofstream& sou
     }
 }
 
+void GGAnimation::WriteSpritesBatched(const std::string& outputName, std::ofstream& sourceFile)
+{
+	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
+	{
+		const GGAnimationFrame& frame = m_frames[frameLoop];
+
+        std::string spriteName = BuildFrameName(outputName, frameLoop) + "SpriteBatched";
+
+        sourceFile << "const AnimationSpriteBatched " << spriteName << "[] = \n";
+        sourceFile << "{\n";
+
+        for (const auto& adjoiningSprite : frame.getAdjoiningSprites())
+        {
+            sourceFile << "    { ";
+            sourceFile << adjoiningSprite.adjoiningCount << ", ";
+            sourceFile << "{ ";
+            sourceFile << adjoiningSprite.sprite->xPositionOffset - m_animationProperties.mOffsetX << ", ";
+            sourceFile << adjoiningSprite.sprite->yPositionOffset - m_animationProperties.mOffsetY << ", ";
+            sourceFile << adjoiningSprite.sprite->tileStoreIndex;
+            sourceFile << " }";
+            sourceFile << " },\n";
+        }
+        sourceFile << "    {0},\n";
+        sourceFile << "};\n\n";
+    }
+}
+
+void GGAnimation::WriteFramesBatched(const std::string& outputName, std::ofstream& sourceFile)
+{
+	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
+	{
+		const GGAnimationFrame& frame = m_frames[frameLoop];
+
+        std::string frameName = BuildFrameName(outputName, frameLoop);
+
+		sourceFile << "\n";
+		sourceFile << "const AnimationFrameBatched " << frameName << " = \n";
+		sourceFile << "{\n";
+        sourceFile << "    " << frameName << "SpriteBatched,\n";
+		sourceFile << "    " << frame.GetFrameDelayTime() << ", // frame time\n"; 
+		sourceFile << "};\n";
+	}
+}
+
+
 void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sourceFile)
 {
 	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
@@ -192,12 +243,26 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
 		sourceFile << "\n";
 		sourceFile << "const AnimationFrame " << frameName << " = \n";
 		sourceFile << "{\n";
-		sourceFile << "    " << frameName << "Sprites,\n";
+        sourceFile << "    " << frameName << "SpriteBatch,\n";
 		sourceFile << "    " << frame.getSprites().size() << ", // number of sprites\n";
 		sourceFile << "    " << frame.GetFrameDelayTime() << ", // frame time\n"; 
 		sourceFile << "};\n";
 	}
 }
+
+void GGAnimation::WriteFrameArrayBatched(const std::string& outputName, std::ofstream& sourceFile)
+{
+    sourceFile << "const AnimationFrameBatched* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
+    sourceFile << "{\n";
+
+    for (size_t loop = 0; loop < m_frames.size(); loop++)
+    {
+        sourceFile << "    &" << BuildFrameName(outputName, loop) << ",\n";
+    }
+
+    sourceFile << "};\n\n";
+}
+
 
 void GGAnimation::WriteFrameArray(const std::string& outputName, std::ofstream& sourceFile)
 {
@@ -210,6 +275,23 @@ void GGAnimation::WriteFrameArray(const std::string& outputName, std::ofstream& 
     }
 
     sourceFile << "};\n\n";
+}
+
+
+void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, std::ofstream& sourceFile)
+{
+    // final struct
+    sourceFile << "const AnimationBatched " << outputName << " = \n";
+    sourceFile << "{\n";
+    sourceFile << "    (const AnimationFrameBatched** const)" << outputName << "Frames,\n";
+    sourceFile << "    (unsigned char* const)" << outputName << "TileData, // start of the sprite data\n";
+	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
+    sourceFile << "    " << m_frames.size() << ", // number of frames\n";
+    sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
+    sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
+    sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
+
+    sourceFile << "};\n";
 }
 
 
@@ -243,17 +325,20 @@ void GGAnimation::WriteGGAnimationSourceFile(const std::string& outputFolder, co
 	// tile data
 	WriteTileStore(outputName, sourceFile, m_tileStore);
 
-	// frame sprites
-	WriteSprites(outputName, sourceFile);
-
-	// frames
-	WriteFrames(outputName, sourceFile);
-
-	// frame array
-	WriteFrameArray(outputName, sourceFile);
-
-	// animation
-	WriteAnimationStruct(outputName, sourceFile);
+    if (m_options.mSMSBatchedSprites)
+    {
+        WriteSpritesBatched(outputName, sourceFile);
+        WriteFramesBatched(outputName, sourceFile);
+	    WriteFrameArrayBatched(outputName, sourceFile);
+        WriteAnimationStructBatched(outputName, sourceFile);
+    }
+    else
+    {
+        WriteSprites(outputName, sourceFile);
+	    WriteFrames(outputName, sourceFile);
+        WriteFrameArray(outputName, sourceFile);
+        WriteAnimationStruct(outputName, sourceFile);
+    }
 
     sourceFile.close();
 }

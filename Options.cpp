@@ -62,4 +62,6 @@ void Options::ProcessOptions(const std::string& filename)
 		mSliceWidth = 8;
 		mSliceHeight = 16;
 	}
+
+	mSMSBatchedSprites = (filename.find(".batch.") != std::string::npos) ||(filename.find(".batched.") != std::string::npos);
 }

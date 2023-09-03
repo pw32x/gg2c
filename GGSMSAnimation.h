@@ -19,9 +19,13 @@ public:
 
 private:
 	void WriteSprites(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteSpritesBatched(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrames(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteFramesBatched(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrameArray(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteFrameArrayBatched(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteAnimationStructBatched(const std::string& outputName, std::ofstream& sourceFile);
 
 	void WriteGGAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName);
 	void WriteGGAnimationSourceFile(const std::string& outputFolder, const std::string& outputName);

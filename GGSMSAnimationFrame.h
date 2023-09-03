@@ -29,6 +29,14 @@ struct Sprite
     int yPositionOffset;
 };
 
+struct AdjoiningSprite
+{
+	AdjoiningSprite() : adjoiningCount(0) {}
+
+	int adjoiningCount;
+	const Sprite* sprite;
+};
+
 class GGAnimationFrame
 {
 public:
@@ -43,6 +51,7 @@ public:
 	LONG GetFrameDelayTime() const { return mFrameDelayTime; }
 
 	const std::vector<Sprite>& getSprites() const { return m_sprites; }
+	const std::vector<AdjoiningSprite>& getAdjoiningSprites() const { return m_adjoiningSprites; }
 
 private:
 
@@ -52,10 +61,13 @@ private:
 					std::vector<Sprite>& sprites, 
 					const Options& options);
 
+	void BuildAdjoiningSprites();
+
 private:
 	LONG			mFrameDelayTime;
 	int				mFrameNumber;
 
 	std::vector<Sprite> m_sprites;
+	std::vector<AdjoiningSprite> m_adjoiningSprites;
 };
 }

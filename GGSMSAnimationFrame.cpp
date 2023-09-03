@@ -21,6 +21,45 @@ void GGAnimationFrame::Init(int frameNumber,
 	mFrameNumber = frameNumber;
 	GetGGInfo(galeFile, animationProperties);
 	BuildFrame(galeFile, tileStore, m_sprites, options);
+	BuildAdjoiningSprites();
+}
+
+void GGAnimationFrame::BuildAdjoiningSprites()
+{
+	int batchY = 0xffffffff;
+	int batchItemCount = 0;
+
+	const Sprite* firstSpriteOfBatch = nullptr;
+
+	for (const auto& sprite : m_sprites)
+	{
+		// first sprite
+		if (batchY == 0xffffffff)
+		{
+			batchY = sprite.yPositionOffset;
+			firstSpriteOfBatch = &sprite;
+		}
+		else if (sprite.yPositionOffset != batchY)
+		{
+			AdjoiningSprite adjoiningSprite;
+
+			adjoiningSprite.adjoiningCount = batchItemCount;
+			adjoiningSprite.sprite = firstSpriteOfBatch;
+
+			batchItemCount = 0;
+
+			m_adjoiningSprites.push_back(adjoiningSprite);
+			batchY = sprite.yPositionOffset;
+			firstSpriteOfBatch = &sprite;
+		}
+
+		batchItemCount++;
+	}
+
+	AdjoiningSprite adjoiningSprite;
+	adjoiningSprite.adjoiningCount = batchItemCount;
+	adjoiningSprite.sprite = firstSpriteOfBatch;
+	m_adjoiningSprites.push_back(adjoiningSprite);
 }
 
 void GGAnimationFrame::GetGGInfo(LPVOID galeFile, AnimationProperties& animationProperties)
@@ -316,7 +355,7 @@ void SliceImageIntoTallTiles(BYTE* byteData,
 			Sprite sprite;
 			sprite.tileStoreIndex = tileStore.size() - 2; // sprite index are even
 			sprite.xPositionOffset = startPositionX;
-			sprite.yPositionOffset = startPositionY;
+			sprite.yPositionOffset = startPositionY - 8;
 
 			sprites.push_back(sprite);
         }
