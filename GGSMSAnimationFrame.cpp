@@ -87,24 +87,6 @@ void GGAnimationFrame::GetGGInfo(LPVOID galeFile, AnimationProperties& animation
 }
 
 
-int FileTileInStore(std::vector<Tile>& tileStore, 
-					const Tile& tileToFind)
-{
-	for (size_t loop = 0; loop < tileStore.size(); loop++)
-	{
-		const Tile& storedTile = tileStore[loop];
-
-		if (std::equal(storedTile.begin(), storedTile.end(), tileToFind.begin()))
-		{
-			return loop;
-		}
-	}
-
-	// Tile didn't exist already so create one.
-	tileStore.push_back(tileToFind);
-
-	return tileStore.size() - 1;
-}
 
 void SliceImageIntoTiles(BYTE* byteData, 
 						 int width, 

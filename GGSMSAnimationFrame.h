@@ -5,14 +5,11 @@
 #include "Options.h"
 #include "Sprite.h"
 #include "AnimationProperties.h"
+#include "SMSCommon.h"
 
 namespace sms
 {
 
-typedef std::vector<BYTE> Tile;
-
-#define SMS_TILE_WIDTH 8
-#define SMS_TILE_HEIGHT 8
 
 struct Sprite
 {

@@ -7,6 +7,7 @@
 #include "GGAnimation.h"
 #include "GGPlaneAnimation.h"
 #include "GGSMSAnimation.h"
+#include "GGSMSPlaneAnimation.h"
 #include "Options.h"
 #include "AnimationProperties.h"
 #include "Shlwapi.h"
@@ -242,8 +243,16 @@ int main(int argc, char* argv[])
 
         if (gOptions.mExportToSMSFormat)
         {
-            sms::GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
-		    animation.Write(gOutputFolder, outputFilename);
+	        if (gOptions.mBackgroundPlaneAnimation)
+	        {
+                sms::GGPlaneAnimation animation(gGaleFileHandle, gOptions);
+		        animation.Write(gOutputFolder, outputFilename);
+            }
+            else
+            {
+                sms::GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
+                animation.Write(gOutputFolder, outputFilename);
+            }
         }
         else
         {

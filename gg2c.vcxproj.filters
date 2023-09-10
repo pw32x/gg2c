@@ -65,6 +65,12 @@
     <ClCompile Include="GGSMSAnimation.cpp">
       <Filter>Source Files\SegaMasterSystem</Filter>
     </ClCompile>
+    <ClCompile Include="GGSMSPlaneAnimationFrame.cpp">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSPlaneAnimation.cpp">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationProperties.h">
@@ -116,6 +122,15 @@
       <Filter>Source Files\SegaMasterSystem</Filter>
     </ClInclude>
     <ClInclude Include="gg2c.h" />
+    <ClInclude Include="GGSMSPlaneAnimationFrame.h">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GGSMSPlaneAnimation.h">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SMSCommon.h">
+      <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="galefile151119\galefile.lib">

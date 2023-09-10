@@ -15,3 +15,13 @@ std::string BuildSpriteName(const std::string outputName, int spritenumber);
 
 DWORD ConvertToTileDataRow(int x, int y, int tileWidth, const BYTE* spriteImageData);
 std::string WriteDWORDAsUShort(DWORD value);
+
+
+
+#include "SMSCommon.h"
+
+// SMS
+namespace sms
+{
+	void WriteTileStore(const std::string& outputName, std::ofstream& sourceFile, const std::vector<Tile>& tileStore);
+}
