@@ -95,8 +95,7 @@ void SliceImageIntoTiles(BYTE* byteData,
 						 int bottomMost, 
 						 std::vector<Tile>& tileStore, 
 						 std::vector<Sprite>& sprites,
-
-						 bool sliceSpritesOnGrid)
+						 const Options& options)
 {
 
 	// SMS tiles are always 8x8
@@ -130,7 +129,7 @@ void SliceImageIntoTiles(BYTE* byteData,
         int leftMost;
         int rightMost;
 
-		FindLeftRightExtentsForSlice(byteData, width, sliceTop, sliceBottom, leftMost, rightMost, sliceSpritesOnGrid);
+		FindLeftRightExtentsForSlice(byteData, width, sliceTop, sliceBottom, leftMost, rightMost, options.mSliceSpritesOnGrid);
 		
         //printf("\nLeft/Right Extents - Left: %d, Right: %d\n", leftMost, rightMost);
 
@@ -174,7 +173,7 @@ void SliceImageIntoTiles(BYTE* byteData,
 
 			// Get the sprite. This also modifies the start and end positions to the area actually copied.
 			std::vector<BYTE> tileData;
-			bool atLeastOnePixel = CopySpriteFromByteData(byteData, width, tileData, startPositionX, startPositionY, endPositionX, endPositionY, sliceSpritesOnGrid);
+			bool atLeastOnePixel = CopySpriteFromByteData(byteData, width, tileData, startPositionX, startPositionY, endPositionX, endPositionY, options.mSliceSpritesOnGrid);
 
             if (!atLeastOnePixel)
             {
@@ -182,7 +181,9 @@ void SliceImageIntoTiles(BYTE* byteData,
 			}
 
 			// See if the sprite already exists.
-			int tileStoreIndex = FileTileInStore(tileStore, tileData);
+			int tileStoreIndex = 0;
+			
+			tileStoreIndex = AddOrGetTileInStore(tileStore, tileData, options.mRemoveDuplicates);
 
 			// Create tile properties
 			Sprite sprite;
@@ -203,8 +204,7 @@ void SliceImageIntoTallTiles(BYTE* byteData,
 						 int bottomMost, 
 						 std::vector<Tile>& tileStore, 
 						 std::vector<Sprite>& sprites,
-
-						 bool sliceSpritesOnGrid)
+						 const Options& options)
 {
 
 	// Tall SMS tiles are 8x16
@@ -238,7 +238,7 @@ void SliceImageIntoTallTiles(BYTE* byteData,
         int leftMost;
         int rightMost;
 
-		FindLeftRightExtentsForSlice(byteData, width, sliceTop, sliceBottom, leftMost, rightMost, sliceSpritesOnGrid);
+		FindLeftRightExtentsForSlice(byteData, width, sliceTop, sliceBottom, leftMost, rightMost, options.mSliceSpritesOnGrid);
 		
         //printf("\nLeft/Right Extents - Left: %d, Right: %d\n", leftMost, rightMost);
 
@@ -327,7 +327,7 @@ void SliceImageIntoTallTiles(BYTE* byteData,
 			}
 
 			// See if the sprite already exists.
-			//int tileStoreIndex = FileTileInStore(tileStore, tileData);
+			//int tileStoreIndex = AddOrGetTileInStore(tileStore, tileData);
 
 			// TODO  check for duplicates of tile pairs.
 			tileStore.push_back(topTileData);
@@ -376,7 +376,7 @@ void GGAnimationFrame::BuildFrame(LPVOID galeFile,
 								bottomMost, 
 								tileStore, 
 								sprites, 
-								options.mSliceSpritesOnGrid);
+								options);
 	}
 	else
 	{
@@ -387,7 +387,7 @@ void GGAnimationFrame::BuildFrame(LPVOID galeFile,
 							bottomMost, 
 							tileStore, 
 							sprites, 
-							options.mSliceSpritesOnGrid);
+							options);
 	}
 	delete [] byteData;
 }

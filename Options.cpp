@@ -64,4 +64,6 @@ void Options::ProcessOptions(const std::string& filename)
 	}
 
 	mSMSBatchedSprites = (filename.find(".batch.") != std::string::npos) ||(filename.find(".batched.") != std::string::npos);
+
+	mRemoveDuplicates = (filename.find(".nodedupe") == std::string::npos);
 }

@@ -75,7 +75,7 @@ void GGPlaneAnimationFrame::BuildFrame(LPVOID galeFile,
 			bool verticalFlip = false;
 			bool horizontalFlip = false;
 
-			int tileIndex = FileTileInStore(tileStore, tileData);
+			int tileIndex = AddOrGetTileInStore(tileStore, tileData);
 			uniqueTileCount++;
 
 			/*

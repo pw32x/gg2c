@@ -537,16 +537,18 @@ int FindSpriteArray(const std::vector<SpriteArray>& spriteArrays, const std::vec
 namespace sms
 {
 
-int FileTileInStore(std::vector<Tile>& tileStore, 
-					const Tile& tileToFind)
+int AddOrGetTileInStore(std::vector<Tile>& tileStore, const Tile& tileToFind, bool removeDuplicates)
 {
-	for (size_t loop = 0; loop < tileStore.size(); loop++)
+	if (removeDuplicates)
 	{
-		const Tile& storedTile = tileStore[loop];
-
-		if (std::equal(storedTile.begin(), storedTile.end(), tileToFind.begin()))
+		for (size_t loop = 0; loop < tileStore.size(); loop++)
 		{
-			return loop;
+			const Tile& storedTile = tileStore[loop];
+
+			if (std::equal(storedTile.begin(), storedTile.end(), tileToFind.begin()))
+			{
+				return loop;
+			}
 		}
 	}
 

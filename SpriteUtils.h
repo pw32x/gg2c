@@ -49,5 +49,5 @@ int FindSpriteArray(const std::vector<SpriteArray>& spriteArrays, const std::vec
 
 namespace sms
 {
-int FileTileInStore(std::vector<Tile>& tileStore,  const Tile& tileToFind);
+int AddOrGetTileInStore(std::vector<Tile>& tileStore,  const Tile& tileToFind, bool removeDuplicates = true);
 }

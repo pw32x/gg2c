@@ -204,6 +204,8 @@ void GGAnimation::WriteFrameArray(const std::string& outputName, std::ofstream& 
 
 void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, std::ofstream& sourceFile)
 {
+    sourceFile << "u8 " << outputName << "VdpLocation;\n\n";
+
     // final struct
     sourceFile << "const AnimationBatched " << outputName << " = \n";
     sourceFile << "{\n";
@@ -215,13 +217,15 @@ void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, st
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
     sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
-
+    sourceFile << "    &" << outputName << "VdpLocation,\n";
     sourceFile << "};\n";
 }
 
 
 void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile)
 {
+    sourceFile << "u8 " << outputName << "VdpLocation;\n\n";
+
     // final struct
     sourceFile << "const Animation " << outputName << " = \n";
     sourceFile << "{\n";
@@ -233,7 +237,7 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
     sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
-
+    sourceFile << "    &" << outputName << "VdpLocation,\n";
     sourceFile << "};\n";
 }
 

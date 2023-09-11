@@ -379,6 +379,9 @@ void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, std::
 		sourceFile << "VDPTileIndex " << outputName << "VDPTileIndex;\n";   
 	}
 	*/
+
+	sourceFile << "u16 " << outputName << "VdpLocation;\n\n";
+
     sourceFile << "\n";
 	
 
@@ -392,7 +395,7 @@ void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, std::
     sourceFile << "    " << m_tileStore.size() << ", // the total number of tiles in the animation\n";
     sourceFile << "    " << outputName << "TileData, // start of the tile data\n";
     //sourceFile << "    &" << outputName << "VDPTileIndex, // vdp tile index\n";
-
+	sourceFile << "    &" << outputName << "VdpLocation,\n";
     sourceFile << "};\n";
 }
 

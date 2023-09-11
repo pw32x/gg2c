@@ -22,4 +22,5 @@ public:
 	bool mSMS8x16Sprites = false;
 	bool mSMSBatchedSprites = false;
 	bool mUpdateOnly = false;
+	bool mRemoveDuplicates = true;
 };
