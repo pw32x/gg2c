@@ -34,6 +34,9 @@ struct AdjoiningSprite
 	const Sprite* sprite;
 };
 
+const int NEXT_FRAME_NOT_SET = -1;
+const int NO_LOOP = -2;
+
 class GGAnimationFrame
 {
 public:
@@ -50,6 +53,13 @@ public:
 	const std::vector<Sprite>& getSprites() const { return m_sprites; }
 	const std::vector<AdjoiningSprite>& getAdjoiningSprites() const { return m_adjoiningSprites; }
 
+	int getFrameNumber() const { return mFrameNumber; }
+
+	void setNextFrameIndex(int nextFrame) { mNextFrame = nextFrame; }
+	int getNextFrameIndex() const { return mNextFrame; }
+
+	bool startsAnimation() const { return m_startsAnimation; }
+
 private:
 
 	void GetGGInfo(LPVOID galeFile, AnimationProperties& animationProperties);
@@ -64,7 +74,11 @@ private:
 	LONG			mFrameDelayTime;
 	int				mFrameNumber;
 
+	int				mNextFrame = NEXT_FRAME_NOT_SET;
+
 	std::vector<Sprite> m_sprites;
 	std::vector<AdjoiningSprite> m_adjoiningSprites;
+
+	bool m_startsAnimation = false;
 };
 }

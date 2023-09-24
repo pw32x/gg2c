@@ -39,6 +39,7 @@ private:
 	const Options&					m_options;
 	AnimationProperties&			m_animationProperties;
 	BITMAP							m_generalBitmapInfo;
+	int								m_maxTilesInFrame;
 };
 
 }

@@ -30,6 +30,8 @@ GGAnimation::GGAnimation(LPVOID galeFileHandle, const Options& options, Animatio
     unsigned int numberOfFrames = ggGetFrameCount(m_galeFileHandle);
 	m_frames.resize(numberOfFrames);
 
+    m_maxTilesInFrame = 0;
+
     for (DWORD loop = 0; loop < numberOfFrames; loop++)
     {
 		GGAnimationFrame& frame = m_frames[loop];
@@ -40,7 +42,66 @@ GGAnimation::GGAnimation(LPVOID galeFileHandle, const Options& options, Animatio
                    m_options, 
                    m_animationProperties);
 
+        m_maxTilesInFrame = max(m_maxTilesInFrame, frame.getSprites().size() * 2);
+
 		m_totalFrameTime += frame.GetFrameDelayTime();
+
+        if (loop > 0)
+        {
+            int previousIndex = loop - 1;
+
+            GGAnimationFrame& previousFrame = m_frames[previousIndex];
+
+            if (previousFrame.getNextFrameIndex() == NEXT_FRAME_NOT_SET)
+            {
+                if (frame.startsAnimation())
+                {
+                    int animationStartIndex;
+
+                    auto it = m_animationProperties.animationFrameNames.lower_bound(loop);
+
+                    if (it != m_animationProperties.animationFrameNames.begin()) 
+                    {
+                        --it; // Move the iterator one step back to get the closest key
+                        animationStartIndex = it->first;
+                    } 
+                    else 
+                    {
+                        animationStartIndex = 0;
+                    }
+
+                    previousFrame.setNextFrameIndex(animationStartIndex);
+                }
+                else
+                {
+                    previousFrame.setNextFrameIndex(loop);
+                }
+            }
+        }
+    }
+
+    int lastFrameIndex = m_frames.size() - 1;
+
+    if (m_frames[lastFrameIndex].getNextFrameIndex() == NEXT_FRAME_NOT_SET)
+    {
+        if (!m_frames[lastFrameIndex].startsAnimation())
+        {
+            auto it = m_animationProperties.animationFrameNames.lower_bound(lastFrameIndex);
+
+            if (it != m_animationProperties.animationFrameNames.begin()) 
+            {
+                --it; // Move the iterator one step back to get the closest key
+                m_frames[lastFrameIndex].setNextFrameIndex(it->first);
+            } 
+            else 
+            {
+                m_frames[lastFrameIndex].setNextFrameIndex(0);
+            }
+        }
+        else
+        {
+            m_frames[lastFrameIndex].setNextFrameIndex(lastFrameIndex);
+        }
     }
 }
 
@@ -49,6 +110,15 @@ void GGAnimation::Write(const std::string& outputFolder, const std::string& outp
 	WriteGGAnimationHeaderFile(outputFolder, outputName);
 	WriteGGAnimationSourceFile(outputFolder, outputName);
 }
+
+std::string str_toupper(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), 
+                   [](unsigned char c){ return std::toupper(c); } // correct
+                  );
+    return s;
+}
+
 
 void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName)
 {
@@ -75,7 +145,14 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     else
         headerfile << "extern const Animation " << outputName << ";\n"; 
 
+    headerfile << "\n";
 
+    headerfile << "// frame numbers for specific animations.\n";
+    for (const auto& pair : m_animationProperties.animationFrameNames) 
+	{
+		std::transform(headerGuard.begin(), headerGuard.end(), headerGuard.begin(), ::toupper);
+		headerfile << "#define " << str_toupper(outputName) << "_" << str_toupper(pair.second) << "_FRAME_INDEX" << " " << pair.first << "\n";
+    }
     headerfile << "\n";
 
     // end header guard
@@ -143,14 +220,32 @@ void GGAnimation::WriteFramesBatched(const std::string& outputName, std::ofstrea
 	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
 	{
 		const GGAnimationFrame& frame = m_frames[frameLoop];
+        std::string frameName = BuildFrameName(outputName, frameLoop);
+
+        sourceFile << "extern const AnimationFrameBatched " << frameName << ";\n";
+	}
+
+    sourceFile << "\n";
+
+	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
+	{
+		const GGAnimationFrame& frame = m_frames[frameLoop];
 
         std::string frameName = BuildFrameName(outputName, frameLoop);
+        std::string nextFrameName;
+        
+
+        if (frame.getNextFrameIndex() == NO_LOOP)
+            nextFrameName = "NULL";
+        else
+            nextFrameName = "&" + BuildFrameName(outputName, frame.getNextFrameIndex());
 
 		sourceFile << "\n";
 		sourceFile << "const AnimationFrameBatched " << frameName << " = \n";
 		sourceFile << "{\n";
         sourceFile << "    " << frameName << "SpriteBatched,\n";
 		sourceFile << "    " << frame.GetFrameDelayTime() << ", // frame time\n"; 
+        sourceFile << "    " << nextFrameName << ", // next frame\n";
 		sourceFile << "};\n";
 	}
 }
@@ -161,8 +256,23 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
 	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
 	{
 		const GGAnimationFrame& frame = m_frames[frameLoop];
+        std::string frameName = BuildFrameName(outputName, frameLoop);
+
+        sourceFile << "extern const AnimationFrame " << frameName << ";\n";
+	}
+
+	for (size_t frameLoop = 0; frameLoop < m_frames.size(); frameLoop++)
+	{
+		const GGAnimationFrame& frame = m_frames[frameLoop];
 
         std::string frameName = BuildFrameName(outputName, frameLoop);
+        std::string nextFrameName;
+        
+
+        if (frame.getNextFrameIndex() == NO_LOOP)
+            nextFrameName = "NULL";
+        else
+            nextFrameName = "&" + BuildFrameName(outputName, frame.getNextFrameIndex());
 
 		sourceFile << "\n";
 		sourceFile << "const AnimationFrame " << frameName << " = \n";
@@ -170,6 +280,7 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
         sourceFile << "    " << frameName << "Sprites,\n";
 		sourceFile << "    " << frame.getSprites().size() << ", // number of sprites\n";
 		sourceFile << "    " << frame.GetFrameDelayTime() << ", // frame time\n"; 
+        sourceFile << "    " << nextFrameName << ", // next frame\n";
 		sourceFile << "};\n";
 	}
 }
@@ -212,11 +323,11 @@ void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, st
     sourceFile << "    BATCHED_ANIMATION_RESOURCE_TYPE, \n";
     sourceFile << "    (const AnimationFrameBatched** const)" << outputName << "Frames,\n";
     sourceFile << "    (unsigned char* const)" << outputName << "TileData, // start of the sprite data\n";
-	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
     sourceFile << "    " << m_frames.size() << ", // number of frames\n";
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
     sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
+    sourceFile << "    " << m_maxTilesInFrame << ", // the max amount of sprite tiles in a frame\n";    
     sourceFile << "    &" << outputName << "VdpLocation,\n";
     sourceFile << "};\n";
 }
@@ -232,11 +343,11 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     sourceFile << "    REGULAR_ANIMATION_RESOURCE_TYPE, \n";
     sourceFile << "    (const AnimationFrame** const)" << outputName << "Frames,\n";
     sourceFile << "    (unsigned char* const)" << outputName << "TileData, // start of the sprite data\n";
-	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
     sourceFile << "    " << m_frames.size() << ", // number of frames\n";
     sourceFile << "    " << m_generalBitmapInfo.bmWidth << ", // width in pixels\n";
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
     sourceFile << "    " << m_tileStore.size() << ", // the total amount of tiles in animation\n";
+    sourceFile << "    " << m_maxTilesInFrame << ", // the max amount of sprite tiles in a frame\n";    
     sourceFile << "    &" << outputName << "VdpLocation,\n";
     sourceFile << "};\n";
 }

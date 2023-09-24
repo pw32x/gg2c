@@ -3,6 +3,12 @@
 #include "BitmapUtils.h"
 #include "SpriteUtils.h"
 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <queue>
+#include <vector>
+
 namespace sms
 {
 
@@ -67,23 +73,67 @@ void GGAnimationFrame::GetGGInfo(LPVOID galeFile, AnimationProperties& animation
 	LONG ggFrameDelayTime = ggGetFrameInfo(galeFile, mFrameNumber, 2); // the 2 means frame time?
 	mFrameDelayTime = (LONG)(myround((float)ggFrameDelayTime / 17.0f)); // 17 ms per frame
 
-	const int length =  256;
+	const int length =  1024;
 	char frameName[length];
 	ggGetFrameName(galeFile, mFrameNumber, frameName, length);
 
-	if (strstr(frameName, "ANIMPROP_"))
+
+    std::istringstream iss(frameName);
+    std::queue<std::string> tokens;
+    std::string token;
+
+    while (iss >> token) 
 	{
-		char* token = strtok(frameName, " "); 
+        tokens.push(token);
+    }
 
-		if (strcmp(frameName, "ANIMPROP_OFFSET") == 0)
+	while (!tokens.empty())
+	{
+		std::string token = tokens.front();
+		tokens.pop();
+
+		if (strstr(token.c_str(), "%") || 
+			strstr(token.c_str(), "Copy_") ||
+			strstr(token.c_str(), "Frame"))
+			continue;
+
+		if (strstr(token.c_str(), "OFFSET"))
 		{
-			token = strtok(NULL, " "); 
-			animationProperties.mOffsetX = atoi(token);
+			token = tokens.front();
+			animationProperties.mOffsetX = stoi(token);
+			tokens.pop();
 
-			token = strtok(NULL, " "); 
-			animationProperties.mOffsetY = atoi(token);
+			token = tokens.front();
+			animationProperties.mOffsetY = stoi(token);
+			tokens.pop();
+		}
+		else if (token == "NOLOOP")
+		{
+			mNextFrame = NO_LOOP;
+		}
+		else if (token == "LOOP")
+		{
+			int lastFrameWithAnimationFrameName = 0;
+			
+			if (!animationProperties.animationFrameNames.empty())
+				animationProperties.animationFrameNames.rbegin()->first;
+
+			mNextFrame = lastFrameWithAnimationFrameName;
+		}
+		else if (token == "JUMPTO")
+		{
+			token = tokens.front();
+			mNextFrame = stoi(token);
+			tokens.pop();
+		}
+		else
+		{
+			animationProperties.animationFrameNames.insert({mFrameNumber, token});
+			m_startsAnimation = true;
 		}
 	}
+
+
 }
 
 

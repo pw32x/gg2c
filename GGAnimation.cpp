@@ -261,7 +261,6 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     sourceFile << "    " << m_generalBitmapInfo.bmHeight << ", // height in pixels\n";
     sourceFile << "    " << m_maxTilesPerFrame << ", // max tiles per frame\n";
     sourceFile << "    " << m_tileCount << ", // the total number of tiles in the animation\n";
-	sourceFile << "    " << m_totalFrameTime << ", // the total time of the animation\n";
     sourceFile << "    (u32*)" << outputName << "TileData, // start of the sprite data\n";
 
 	if (mHasFrameTriggerData)
