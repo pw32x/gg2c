@@ -143,9 +143,9 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     std::string streamed = m_options.mStreamed ? "Streamed" : "";
 
     if (m_options.mSMSBatchedSprites)
-        headerfile << "extern const AnimationBatched" << streamed << " " << outputName << ";\n"; 
+        headerfile << "extern const " << streamed << "BatchedAnimation " << outputName << ";\n"; 
     else
-        headerfile << "extern const Animation" << streamed << " " << outputName << ";\n"; 
+        headerfile << "extern const " << streamed << "Animation " << outputName << ";\n"; 
 
     headerfile << "\n";
 
@@ -203,9 +203,9 @@ void GGAnimation::WriteSpritesBatched(const std::string& outputName, std::ofstre
 	{
 		const GGAnimationFrame& frame = m_frames[frameLoop];
 
-        std::string spriteName = BuildFrameName(outputName, frameLoop) + "SpriteBatched";
+        std::string spriteName = BuildFrameName(outputName, frameLoop) + "BatchedSprite";
 
-        sourceFile << "const AnimationSpriteBatched " << spriteName << "[] = \n";
+        sourceFile << "const BatchedAnimationSprite " << spriteName << "[] = \n";
         sourceFile << "{\n";
 
         int tileStoreModifier = 0;
@@ -239,9 +239,9 @@ void GGAnimation::WriteFramesBatched(const std::string& outputName, std::ofstrea
         std::string frameName = BuildFrameName(outputName, frameLoop);
 
         if (m_options.mStreamed)
-            sourceFile << "extern const AnimationFrameBatchedStreamed " << frameName << ";\n";
+            sourceFile << "extern const StreamedBatchedAnimationFrame " << frameName << ";\n";
         else
-            sourceFile << "extern const AnimationFrameBatched " << frameName << ";\n";
+            sourceFile << "extern const BatchedAnimationFrame " << frameName << ";\n";
 	}
 
     sourceFile << "\n";
@@ -262,12 +262,12 @@ void GGAnimation::WriteFramesBatched(const std::string& outputName, std::ofstrea
 		sourceFile << "\n";
 
         if (m_options.mStreamed)
-            sourceFile << "const AnimationFrameBatchedStreamed " << frameName << " = \n";
+            sourceFile << "const StreamedBatchedAnimationFrame " << frameName << " = \n";
         else
-		    sourceFile << "const AnimationFrameBatched " << frameName << " = \n";
+		    sourceFile << "const BatchedAnimationFrame " << frameName << " = \n";
 
 		sourceFile << "{\n";
-        sourceFile << "    " << frameName << "SpriteBatched,\n";
+        sourceFile << "    " << frameName << "BatchedSprite,\n";
 
         if (m_options.mStreamed)
         {
@@ -290,7 +290,7 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
         std::string frameName = BuildFrameName(outputName, frameLoop);
 
         if (m_options.mStreamed)
-            sourceFile << "extern const AnimationFrameStreamed " << frameName << ";\n";
+            sourceFile << "extern const StreamedAnimationFrame " << frameName << ";\n";
         else
             sourceFile << "extern const AnimationFrame " << frameName << ";\n";
 	}
@@ -312,7 +312,7 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
 
 
         if (m_options.mStreamed)
-            sourceFile << "const AnimationFrameStreamed " << frameName << " = \n";
+            sourceFile << "const StreamedAnimationFrame " << frameName << " = \n";
         else
 		    sourceFile << "const AnimationFrame " << frameName << " = \n";
 
@@ -336,9 +336,9 @@ void GGAnimation::WriteFrames(const std::string& outputName, std::ofstream& sour
 void GGAnimation::WriteFrameArrayBatched(const std::string& outputName, std::ofstream& sourceFile)
 {
     if (m_options.mStreamed)
-        sourceFile << "const AnimationFrameBatchedStreamed* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
+        sourceFile << "const StreamedBatchedAnimationFrame* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
     else
-        sourceFile << "const AnimationFrameBatched* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
+        sourceFile << "const BatchedAnimationFrame* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
     sourceFile << "{\n";
 
     for (size_t loop = 0; loop < m_frames.size(); loop++)
@@ -353,7 +353,7 @@ void GGAnimation::WriteFrameArrayBatched(const std::string& outputName, std::ofs
 void GGAnimation::WriteFrameArray(const std::string& outputName, std::ofstream& sourceFile)
 {
     if (m_options.mStreamed)
-        sourceFile << "const AnimationFrameStreamed* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
+        sourceFile << "const StreamedAnimationFrame* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
     else
         sourceFile << "const AnimationFrame* const " << outputName << "Frames[" << m_frames.size() << "] = \n";
     sourceFile << "{\n";
@@ -374,18 +374,18 @@ void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, st
     if (m_options.mStreamed)
     {
         // final struct
-        sourceFile << "const AnimationBatchedStreamed " << outputName << " = \n";
+        sourceFile << "const StreamedBatchedAnimation " << outputName << " = \n";
         sourceFile << "{\n";
-        sourceFile << "    BATCHED_STREAMED_ANIMATION_RESOURCE_TYPE, \n";
-        sourceFile << "    (const AnimationFrameBatchedStreamed** const)" << outputName << "Frames,\n";
+        sourceFile << "    STREAMED_BATCHED_ANIMATION_RESOURCE_TYPE, \n";
+        sourceFile << "    (const StreamedBatchedAnimationFrame** const)" << outputName << "Frames,\n";
     }
     else
     {
         // final struct
-        sourceFile << "const AnimationBatched " << outputName << " = \n";
+        sourceFile << "const BatchedAnimation " << outputName << " = \n";
         sourceFile << "{\n";
         sourceFile << "    BATCHED_ANIMATION_RESOURCE_TYPE, \n";
-        sourceFile << "    (const AnimationFrameBatched** const)" << outputName << "Frames,\n";
+        sourceFile << "    (const BatchedAnimationFrame** const)" << outputName << "Frames,\n";
     }
 
 
@@ -410,10 +410,10 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     if (m_options.mStreamed)
     {
         // final struct
-        sourceFile << "const AnimationStreamed " << outputName << " = \n";
+        sourceFile << "const StreamedAnimation " << outputName << " = \n";
         sourceFile << "{\n";
-        sourceFile << "    REGULAR_STREAMED_ANIMATION_RESOURCE_TYPE, \n";
-        sourceFile << "    (const AnimationFrameStreamed** const)" << outputName << "Frames,\n";
+        sourceFile << "    STREAMED_REGULAR_ANIMATION_RESOURCE_TYPE, \n";
+        sourceFile << "    (const StreamedAnimationFrame** const)" << outputName << "Frames,\n";
     }
     else
     {
