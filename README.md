@@ -24,6 +24,15 @@ There are different options when exporting Graphics Gale file to C source files.
    Example: **font.sliceongrid8x8.cutslicesasframe.gal**
  * **planeanim**: specifies that the animation is intented to animate background planes using tiles. For very large animations that can use a plane instead of sprites. \
     Example: **backgrondanimation.planeanim.gal**
+    
+Master System Specific
+
+* **sms8x16** export assumes you're using 8x16 sprites
+* **batched** export assumes you'll be using the sprites with SMS_add***AdjoiningSprites functions	
+* **nodedupe** don't remove any duplicate tiles
+* **streamed** export assumes the sprites will be streamed (updated on demand) to the vdp instead of loading the entire tile data in one shot.
+	    
+    
 # Examples
    Examples can be found in the **testdata** folder
    

@@ -63,7 +63,14 @@ void Options::ProcessOptions(const std::string& filename)
 		mSliceHeight = 16;
 	}
 
+	// store the sprites in such a way so that we can call the SMS_add****AdjoiningSprites functions
+	// on them.
 	mSMSBatchedSprites = (filename.find(".batch.") != std::string::npos) ||(filename.find(".batched.") != std::string::npos);
 
 	mRemoveDuplicates = (filename.find(".nodedupe") == std::string::npos);
+
+	// the animation will only be uploaded one frame at a time to the vdp. 
+	// the vdp tile addresses in the sprites will start at 0 and not the index
+	// of the sprite tiles location in the tile store.
+	mStreamed = (filename.find(".streamed") != std::string::npos); 
 }

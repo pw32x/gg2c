@@ -23,4 +23,5 @@ public:
 	bool mSMSBatchedSprites = false;
 	bool mUpdateOnly = false;
 	bool mRemoveDuplicates = true;
+	bool mStreamed = false;
 };
