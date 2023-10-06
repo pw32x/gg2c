@@ -18,6 +18,15 @@
     <Filter Include="Source Files\Genesis">
       <UniqueIdentifier>{8e1cc27b-ebab-4fa7-8c0a-586f9eefccea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\SegaMasterSystem\Animation">
+      <UniqueIdentifier>{269d85df-4644-47f3-842a-1aa6c8dcb854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SegaMasterSystem\TileAnimation">
+      <UniqueIdentifier>{c61f5555-96c2-47de-9a80-5e363f50b6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SegaMasterSystem\PlaneAnimation">
+      <UniqueIdentifier>{9e504889-212e-4fa1-a63d-6d0d94fd54e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gg2c.cpp">
@@ -59,17 +68,29 @@
     <ClCompile Include="GGPlaneAnimationFrame.cpp">
       <Filter>Source Files\Genesis</Filter>
     </ClCompile>
-    <ClCompile Include="GGSMSAnimationFrame.cpp">
-      <Filter>Source Files\SegaMasterSystem</Filter>
-    </ClCompile>
     <ClCompile Include="GGSMSAnimation.cpp">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+      <Filter>Source Files\SegaMasterSystem\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="GGSMSPlaneAnimationFrame.cpp">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+    <ClCompile Include="GGSMSAnimationFrame.cpp">
+      <Filter>Source Files\SegaMasterSystem\Animation</Filter>
     </ClCompile>
     <ClCompile Include="GGSMSPlaneAnimation.cpp">
+      <Filter>Source Files\SegaMasterSystem\PlaneAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSPlaneAnimationFrame.cpp">
+      <Filter>Source Files\SegaMasterSystem\PlaneAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSTileAnimation.cpp">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="GGSMSTileAnimationFrame.cpp">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SMSCommon.cpp">
       <Filter>Source Files\SegaMasterSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TileUtils.cpp">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,21 +136,30 @@
     <ClInclude Include="GGPlaneAnimationFrame.h">
       <Filter>Source Files\Genesis</Filter>
     </ClInclude>
-    <ClInclude Include="GGSMSAnimationFrame.h">
+    <ClInclude Include="gg2c.h" />
+    <ClInclude Include="SMSCommon.h">
       <Filter>Source Files\SegaMasterSystem</Filter>
     </ClInclude>
     <ClInclude Include="GGSMSAnimation.h">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+      <Filter>Source Files\SegaMasterSystem\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="gg2c.h" />
-    <ClInclude Include="GGSMSPlaneAnimationFrame.h">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+    <ClInclude Include="GGSMSAnimationFrame.h">
+      <Filter>Source Files\SegaMasterSystem\Animation</Filter>
     </ClInclude>
     <ClInclude Include="GGSMSPlaneAnimation.h">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+      <Filter>Source Files\SegaMasterSystem\PlaneAnimation</Filter>
     </ClInclude>
-    <ClInclude Include="SMSCommon.h">
-      <Filter>Source Files\SegaMasterSystem</Filter>
+    <ClInclude Include="GGSMSPlaneAnimationFrame.h">
+      <Filter>Source Files\SegaMasterSystem\PlaneAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="GGSMSTileAnimation.h">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="GGSMSTileAnimationFrame.h">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="TileUtils.h">
+      <Filter>Source Files\SegaMasterSystem\TileAnimation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

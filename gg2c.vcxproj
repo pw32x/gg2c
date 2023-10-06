@@ -150,11 +150,15 @@
     <ClCompile Include="GGSMSAnimationFrame.cpp" />
     <ClCompile Include="GGSMSPlaneAnimation.cpp" />
     <ClCompile Include="GGSMSPlaneAnimationFrame.cpp" />
+    <ClCompile Include="GGSMSTileAnimation.cpp" />
+    <ClCompile Include="GGSMSTileAnimationFrame.cpp" />
     <ClCompile Include="Options.cpp" />
     <ClCompile Include="palette.cpp" />
+    <ClCompile Include="SMSCommon.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteUtils.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TileUtils.cpp" />
     <ClCompile Include="WriteUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +174,8 @@
     <ClInclude Include="GGSMSAnimationFrame.h" />
     <ClInclude Include="GGSMSPlaneAnimation.h" />
     <ClInclude Include="GGSMSPlaneAnimationFrame.h" />
+    <ClInclude Include="GGSMSTileAnimation.h" />
+    <ClInclude Include="GGSMSTileAnimationFrame.h" />
     <ClInclude Include="Options.h" />
     <ClInclude Include="palette.h" />
     <ClInclude Include="SMSCommon.h" />
@@ -177,6 +183,7 @@
     <ClInclude Include="SpriteUtils.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileUtils.h" />
     <ClInclude Include="WriteUtils.h" />
   </ItemGroup>
   <ItemGroup>

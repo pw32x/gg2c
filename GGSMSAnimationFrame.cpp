@@ -2,6 +2,7 @@
 #include "GGSMSAnimationFrame.h"
 #include "BitmapUtils.h"
 #include "SpriteUtils.h"
+#include "TileUtils.h"
 
 #include <iostream>
 #include <string>

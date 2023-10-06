@@ -10,35 +10,10 @@
 namespace sms
 {
 
-
-struct Sprite
-{
-	Sprite() :
-		tileStoreIndex(-1),
-		xPositionOffset(0),
-		yPositionOffset(0)
-	{
-
-	}
-
-	int tileStoreIndex;
-    int xPositionOffset;
-    int yPositionOffset;
-};
-
-struct AdjoiningSprite
-{
-	AdjoiningSprite() : adjoiningCount(0) {}
-
-	int adjoiningCount;
-	const Sprite* sprite;
-};
-
-
-class GGAnimationFrame
+class GGTileAnimationFrame
 {
 public:
-	GGAnimationFrame();
+	GGTileAnimationFrame();
 
 	void Init(int frameNumber, 
 			  LPVOID galeFile, 
@@ -48,8 +23,8 @@ public:
 
 	LONG GetFrameDelayTime() const { return mFrameDelayTime; }
 
-	const std::vector<Sprite>& getSprites() const { return m_sprites; }
-	const std::vector<AdjoiningSprite>& getAdjoiningSprites() const { return m_adjoiningSprites; }
+	int GetTileDataIndex() const { return mTileDataIndex; }
+	int GetTilesInFrame() const { return mTilesInFrame; }
 
 	int getFrameNumber() const { return mFrameNumber; }
 
@@ -63,20 +38,18 @@ private:
 	void GetGGInfo(LPVOID galeFile, AnimationProperties& animationProperties);
 	void BuildFrame(LPVOID galeFile, 
 					std::vector<Tile>& tileStore, 
-					std::vector<Sprite>& sprites, 
 					const Options& options);
-
-	void BuildAdjoiningSprites();
 
 private:
 	LONG			mFrameDelayTime;
 	int				mFrameNumber;
 
-	int				mNextFrame = NEXT_FRAME_NOT_SET;
+	int				mTileDataIndex;
+	int				mTilesInFrame;
 
-	std::vector<Sprite> m_sprites;
-	std::vector<AdjoiningSprite> m_adjoiningSprites;
+	int				mNextFrame = NEXT_FRAME_NOT_SET;
 
 	bool m_startsAnimation = false;
 };
+
 }

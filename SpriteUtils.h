@@ -44,10 +44,3 @@ void SliceImageIntoSprites(BYTE* byteData,
 						   int sliceHeight);
 
 int FindSpriteArray(const std::vector<SpriteArray>& spriteArrays, const std::vector<int>& spritePropertiesIndexes);
-
-#include "SMSCommon.h"
-
-namespace sms
-{
-int AddOrGetTileInStore(std::vector<Tile>& tileStore,  const Tile& tileToFind, bool removeDuplicates = true);
-}

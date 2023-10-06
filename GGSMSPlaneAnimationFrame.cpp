@@ -2,8 +2,10 @@
 #include "GGSMSPlaneAnimationFrame.h"
 #include "BitmapUtils.h"
 #include "SpriteUtils.h"
+#include "TileUtils.h"
 #include <set>
 #include "palette.h"
+
 
 namespace sms
 {
@@ -66,7 +68,12 @@ void GGPlaneAnimationFrame::BuildFrame(LPVOID galeFile,
 			int startPositionX = loopx * TILE_WIDTH;
 			int startPositionY = loopy * TILE_HEIGHT;
 
-			CopyTileFromByteData(byteData, bitmapInfo.bmWidth, bitmapInfo.bmHeight, tileData, startPositionX, startPositionY);
+			CopyTileFromByteData(byteData, 
+								 bitmapInfo.bmWidth, 
+								 bitmapInfo.bmHeight, 
+								 tileData, 
+								 startPositionX, 
+								 startPositionY);
 
 		
 

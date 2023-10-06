@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <sstream>
+#include "SMSCommon.h"
 
 namespace sms
 {
@@ -109,14 +110,6 @@ void GGAnimation::Write(const std::string& outputFolder, const std::string& outp
 {
 	WriteGGAnimationHeaderFile(outputFolder, outputName);
 	WriteGGAnimationSourceFile(outputFolder, outputName);
-}
-
-std::string str_toupper(std::string s)
-{
-    std::transform(s.begin(), s.end(), s.begin(), 
-                   [](unsigned char c){ return std::toupper(c); } // correct
-                  );
-    return s;
 }
 
 

@@ -24,4 +24,5 @@ public:
 	bool mUpdateOnly = false;
 	bool mRemoveDuplicates = true;
 	bool mStreamed = false;
+	bool mTileAnimation = false;
 };

@@ -73,4 +73,6 @@ void Options::ProcessOptions(const std::string& filename)
 	// the vdp tile addresses in the sprites will start at 0 and not the index
 	// of the sprite tiles location in the tile store.
 	mStreamed = (filename.find(".streamed") != std::string::npos); 
+
+	mTileAnimation = (filename.find(".tileanimation") != std::string::npos); 
 }
