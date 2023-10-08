@@ -143,13 +143,16 @@ void GGTileAnimation::WriteHeaderFile(const std::string& outputFolder, const std
 
     headerfile << "\n";
 
-    headerfile << "// frame numbers for specific animations.\n";
-    for (const auto& pair : m_animationProperties.animationFrameNames) 
-	{
-		std::transform(headerGuard.begin(), headerGuard.end(), headerGuard.begin(), ::toupper);
-		headerfile << "#define " << str_toupper(outputName) << "_" << str_toupper(pair.second) << "_FRAME_INDEX" << " " << pair.first << "\n";
+    if (m_animationProperties.animationFrameNames.size() > 0)
+    {
+        headerfile << "// frame numbers for specific animations.\n";
+        for (const auto& pair : m_animationProperties.animationFrameNames) 
+	    {
+		    std::transform(headerGuard.begin(), headerGuard.end(), headerGuard.begin(), ::toupper);
+		    headerfile << "#define " << str_toupper(outputName) << "_" << str_toupper(pair.second) << "_FRAME_INDEX" << " " << pair.first << "\n";
+        }
+        headerfile << "\n";
     }
-    headerfile << "\n";
 
     // end header guard
     headerfile << "#endif\n\n";

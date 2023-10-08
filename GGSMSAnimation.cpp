@@ -43,7 +43,7 @@ GGAnimation::GGAnimation(LPVOID galeFileHandle, const Options& options, Animatio
                    m_options, 
                    m_animationProperties);
 
-        m_maxTilesInFrame = max(m_maxTilesInFrame, frame.getSprites().size() * 2);
+        m_maxTilesInFrame = max(m_maxTilesInFrame, (int)frame.getSprites().size() * 2);
 
 		m_totalFrameTime += frame.GetFrameDelayTime();
 
@@ -142,13 +142,16 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
 
     headerfile << "\n";
 
-    headerfile << "// frame numbers for specific animations.\n";
-    for (const auto& pair : m_animationProperties.animationFrameNames) 
-	{
-		std::transform(headerGuard.begin(), headerGuard.end(), headerGuard.begin(), ::toupper);
-		headerfile << "#define " << str_toupper(outputName) << "_" << str_toupper(pair.second) << "_FRAME_INDEX" << " " << pair.first << "\n";
+    if (m_animationProperties.animationFrameNames.size() > 0)
+    {
+        headerfile << "// frame numbers for specific animations.\n";
+        for (const auto& pair : m_animationProperties.animationFrameNames) 
+	    {
+		    std::transform(headerGuard.begin(), headerGuard.end(), headerGuard.begin(), ::toupper);
+		    headerfile << "#define " << str_toupper(outputName) << "_" << str_toupper(pair.second) << "_FRAME_INDEX" << " " << pair.first << "\n";
+        }
+        headerfile << "\n";
     }
-    headerfile << "\n";
 
     // end header guard
     headerfile << "#endif\n\n";

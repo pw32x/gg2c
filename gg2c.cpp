@@ -21,20 +21,23 @@ BITMAP							gGeneralBitmapInfo;
 
 DWORD							gTotalNumberOfTiles = 0;
 
-Options							gOptions;
-AnimationProperties				gAnimationProperties;
+
+
 
 std::vector<std::string>        gFilenames;
+
+bool gUpdateOnly = false;
+bool gExportToSMSFormat = false;
 
 void parseOptionalParameter(const std::string& parameter)
 {
     if (parameter == "-sms")
     {
-        gOptions.mExportToSMSFormat = true;
+        gExportToSMSFormat = true;
     }
     else if (parameter == "-updateonly")
     {
-        gOptions.mUpdateOnly = true;
+        gUpdateOnly = true;
     }
     else
     {
@@ -211,6 +214,11 @@ int main(int argc, char* argv[])
 
     for (auto& filename : gFilenames)
     {
+        AnimationProperties	animationProperties;
+        Options	options;
+
+        options.mExportToSMSFormat = gExportToSMSFormat;
+
 	    OpenGaleFile(filename);
 
         std::string outputFilename;
@@ -230,7 +238,7 @@ int main(int argc, char* argv[])
         index = outputFilename.find(".");
         outputFilename = outputFilename.substr(0, index);
 
-        if (gOptions.mUpdateOnly && !needsUpdate(filename, gOutputFolder, outputFilename))
+        if (gUpdateOnly && !needsUpdate(filename, gOutputFolder, outputFilename))
         {
             printf("%s is already up to date.\n", filename.c_str());
             continue;
@@ -240,36 +248,36 @@ int main(int argc, char* argv[])
             printf("Exporting %s \n", filename.c_str());
         }
 
-	    gOptions.ProcessOptions(filename);
+	    options.ProcessOptions(filename);
 
-        if (gOptions.mExportToSMSFormat)
+        if (gExportToSMSFormat)
         {
-	        if (gOptions.mBackgroundPlaneAnimation)
+	        if (options.mBackgroundPlaneAnimation)
 	        {
-                sms::GGPlaneAnimation animation(gGaleFileHandle, gOptions);
+                sms::GGPlaneAnimation animation(gGaleFileHandle, options);
 		        animation.Write(gOutputFolder, outputFilename);
             }
-            else if (gOptions.mTileAnimation)
+            else if (options.mTileAnimation)
             {
-                sms::GGTileAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
+                sms::GGTileAnimation animation(gGaleFileHandle, options, animationProperties);
 		        animation.Write(gOutputFolder, outputFilename);
             }
             else
             {
-                sms::GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
+                sms::GGAnimation animation(gGaleFileHandle, options, animationProperties);
                 animation.Write(gOutputFolder, outputFilename);
             }
         }
         else
         {
-	        if (gOptions.mBackgroundPlaneAnimation)
+	        if (options.mBackgroundPlaneAnimation)
 	        {
-		        GGPlaneAnimation animation(gGaleFileHandle, gOptions);
+		        GGPlaneAnimation animation(gGaleFileHandle, options);
 		        animation.Write(gOutputFolder, outputFilename);
 	        }
 	        else
 	        {
-		        GGAnimation animation(gGaleFileHandle, gOptions, gAnimationProperties);
+		        GGAnimation animation(gGaleFileHandle, options, animationProperties);
 		        animation.Write(gOutputFolder, outputFilename);
 	        }
         }

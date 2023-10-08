@@ -74,5 +74,5 @@ void Options::ProcessOptions(const std::string& filename)
 	// of the sprite tiles location in the tile store.
 	mStreamed = (filename.find(".streamed") != std::string::npos); 
 
-	mTileAnimation = (filename.find(".tileanimation") != std::string::npos); 
+	mTileAnimation = (filename.find(".animatedtileset") != std::string::npos); 
 }

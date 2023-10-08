@@ -21,7 +21,6 @@ public:
 	bool mExportToSMSFormat = false;
 	bool mSMS8x16Sprites = false;
 	bool mSMSBatchedSprites = false;
-	bool mUpdateOnly = false;
 	bool mRemoveDuplicates = true;
 	bool mStreamed = false;
 	bool mTileAnimation = false;
