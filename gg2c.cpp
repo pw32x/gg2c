@@ -173,6 +173,25 @@ bool isNewer(FILETIME a, FILETIME b)
     return false;
 }
 
+bool folderExists(const char* folderPath) 
+{
+    DWORD dwAttrib = GetFileAttributesA(folderPath);
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
+bool createFolder(const char* folderPath) 
+{
+    if (!CreateDirectoryA(folderPath, NULL)) 
+    {
+        if (GetLastError() != ERROR_ALREADY_EXISTS) 
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool needsUpdate(const std::string& filename, const std::string& outputFolder, const std::string& outputFilename)
 {
     // we need an update if the app or the filename is newer than the exported files.
@@ -182,6 +201,9 @@ bool needsUpdate(const std::string& filename, const std::string& outputFolder, c
 
     FILETIME appTime = getLastWriteTime(filePath);
     FILETIME fileTime = getLastWriteTime(filename.c_str());
+
+    if (!folderExists(outputFolder.c_str()))
+        return true;
 
     std::string sourceFilename = outputFolder + outputFilename + ".c";
     FILETIME sourceTime = getLastWriteTime(sourceFilename.c_str());
@@ -247,6 +269,9 @@ int main(int argc, char* argv[])
         {
             printf("Exporting %s \n", filename.c_str());
         }
+
+        if (!folderExists(gOutputFolder.c_str()))
+            createFolder(gOutputFolder.c_str());
 
 	    options.ProcessOptions(filename);
 
