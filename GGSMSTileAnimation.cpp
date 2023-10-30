@@ -113,13 +113,17 @@ GGTileAnimation::GGTileAnimation(LPVOID galeFileHandle, const Options& options, 
     }
 }
 
-void GGTileAnimation::Write(const std::string& outputFolder, const std::string& outputName)
+void GGTileAnimation::Write(const std::string& outputFolder, 
+                            const std::string& outputName,
+                            const std::string& bank)
 {
-	WriteHeaderFile(outputFolder, outputName);
-	WriteSourceFile(outputFolder, outputName);
+	WriteHeaderFile(outputFolder, outputName, bank);
+	WriteSourceFile(outputFolder, outputName, bank);
 }
 
-void GGTileAnimation::WriteHeaderFile(const std::string& outputFolder, const std::string& outputName)
+void GGTileAnimation::WriteHeaderFile(const std::string& outputFolder, 
+                                      const std::string& outputName,
+                                      const std::string& bank)
 {
 	std::string headerFilename = outputName + ".h";
 	std::ofstream headerfile(outputFolder + headerFilename, std::ios::trunc);
@@ -139,7 +143,7 @@ void GGTileAnimation::WriteHeaderFile(const std::string& outputFolder, const std
 
 	// exported types
 
-    headerfile << "RESOURCE extern const TileAnimation " << outputName << ";\n"; 
+    headerfile << "RESOURCE(" << bank << ") extern const TileAnimation " << outputName << ";\n"; 
 
     headerfile << "\n";
 
@@ -207,12 +211,14 @@ void GGTileAnimation::WriteFrameArray(const std::string& outputName, std::ofstre
     sourceFile << "};\n\n";
 }
 
-void GGTileAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile)
+void GGTileAnimation:: WriteAnimationStruct(const std::string& outputName, 
+                                            std::ofstream& sourceFile,
+                                            const std::string& bank)
 {
     sourceFile << "u8 " << outputName << "VdpLocation;\n\n";
 
     // final struct
-    sourceFile << "const TileAnimation " << outputName << " = \n";
+    sourceFile << "RESOURCE(" << bank << ") const TileAnimation " << outputName << " = \n";
     sourceFile << "{\n";
     sourceFile << "    TILE_ANIMATION_RESOURCE_TYPE, \n";
     sourceFile << "    (const TileAnimationFrame** const)" << outputName << "Frames,\n";
@@ -227,7 +233,9 @@ void GGTileAnimation:: WriteAnimationStruct(const std::string& outputName, std::
 }
 
 
-void GGTileAnimation::WriteSourceFile(const std::string& outputFolder, const std::string& outputName)
+void GGTileAnimation::WriteSourceFile(const std::string& outputFolder, 
+                                      const std::string& outputName,
+                                      const std::string& bank)
 {
 	std::ofstream sourceFile(outputFolder + outputName + ".c");
 
@@ -242,7 +250,7 @@ void GGTileAnimation::WriteSourceFile(const std::string& outputFolder, const std
 
 	WriteFrames(outputName, sourceFile);
     WriteFrameArray(outputName, sourceFile);
-    WriteAnimationStruct(outputName, sourceFile);
+    WriteAnimationStruct(outputName, sourceFile, bank);
 
     sourceFile.close();
 }

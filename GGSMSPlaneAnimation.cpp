@@ -73,13 +73,15 @@ int GGPlaneAnimation::findSameFrameIndex(const GGPlaneAnimationFrame& frame)
 }
 
 
-void GGPlaneAnimation::Write(const std::string& outputFolder, const std::string& outputName)
+void GGPlaneAnimation::Write(const std::string& outputFolder, const std::string& outputName, const std::string& bank)
 {
-	WriteGGPlaneAnimationHeaderFile(outputFolder, outputName);
-	WriteGGPlaneAnimationSourceFile(outputFolder, outputName);
+	WriteGGPlaneAnimationHeaderFile(outputFolder, outputName, bank);
+	WriteGGPlaneAnimationSourceFile(outputFolder, outputName, bank);
 }
 
-void GGPlaneAnimation::WriteGGPlaneAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName)
+void GGPlaneAnimation::WriteGGPlaneAnimationHeaderFile(const std::string& outputFolder, 
+													   const std::string& outputName,
+													   const std::string& bank)
 {
 	std::string headerFilename = outputName + ".h";
 	std::ofstream headerfile(outputFolder + headerFilename);
@@ -98,7 +100,7 @@ void GGPlaneAnimation::WriteGGPlaneAnimationHeaderFile(const std::string& output
     headerfile << "\n";
 
 	// exported types
-    headerfile << "RESOURCE extern const PlaneAnimation " << outputName << ";\n"; 
+    headerfile << "RESOURCE(" << bank << ") extern const PlaneAnimation " << outputName << ";\n"; 
 
 	/*
 	if (m_options.mFixedBack)
@@ -361,7 +363,9 @@ void GGPlaneAnimation::WriteFrameArray(const std::string& outputName, std::ofstr
 	sourceFile << "};\n\n";		
 }
 
-void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile)
+void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, 
+											std::ofstream& sourceFile,
+											const std::string& bank)
 {
     // final struct
     sourceFile << "\n";
@@ -385,7 +389,7 @@ void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, std::
     sourceFile << "\n";
 	
 
-    sourceFile << "const PlaneAnimation " << outputName << " = \n";
+    sourceFile << "RESOURCE(" << bank << ") const PlaneAnimation " << outputName << " = \n";
     sourceFile << "{\n";
 	sourceFile << "    PLANE_ANIMATION_RESOURCE_TYPE, \n";
     sourceFile << "    " << outputName << "Frames,\n";
@@ -400,7 +404,9 @@ void GGPlaneAnimation::WriteAnimationStruct(const std::string& outputName, std::
 }
 
 
-void GGPlaneAnimation::WriteGGPlaneAnimationSourceFile(const std::string& outputFolder, const std::string& outputName)
+void GGPlaneAnimation::WriteGGPlaneAnimationSourceFile(const std::string& outputFolder, 
+													   const std::string& outputName,
+													   const std::string& bank)
 {
 	std::ofstream sourceFile(outputFolder + outputName + ".c");
 
@@ -420,7 +426,7 @@ void GGPlaneAnimation::WriteGGPlaneAnimationSourceFile(const std::string& output
 
 	WriteFrameArray(outputName, sourceFile);
 
-	WriteAnimationStruct(outputName, sourceFile);
+	WriteAnimationStruct(outputName, sourceFile, bank);
 
     sourceFile.close();
 }

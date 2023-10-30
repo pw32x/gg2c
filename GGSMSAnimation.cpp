@@ -106,14 +106,16 @@ GGAnimation::GGAnimation(LPVOID galeFileHandle, const Options& options, Animatio
     }
 }
 
-void GGAnimation::Write(const std::string& outputFolder, const std::string& outputName)
+void GGAnimation::Write(const std::string& outputFolder, const std::string& outputName, const std::string& bank)
 {
-	WriteGGAnimationHeaderFile(outputFolder, outputName);
-	WriteGGAnimationSourceFile(outputFolder, outputName);
+	WriteGGAnimationHeaderFile(outputFolder, outputName, bank);
+	WriteGGAnimationSourceFile(outputFolder, outputName, bank);
 }
 
 
-void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName)
+void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, 
+                                             const std::string& outputName,
+                                             const std::string& bank)
 {
 	std::string headerFilename = outputName + ".h";
 	std::ofstream headerfile(outputFolder + headerFilename, std::ios::trunc);
@@ -136,9 +138,9 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     std::string streamed = m_options.mStreamed ? "Streamed" : "";
 
     if (m_options.mSMSBatchedSprites)
-        headerfile << "RESOURCE extern const " << streamed << "BatchedAnimation " << outputName << ";\n"; 
+        headerfile << "RESOURCE(" << bank << ") extern const " << streamed << "BatchedAnimation " << outputName << ";\n"; 
     else
-        headerfile << "RESOURCE extern const " << streamed << "Animation " << outputName << ";\n"; 
+        headerfile << "RESOURCE(" << bank << ") extern const " << streamed << "Animation " << outputName << ";\n"; 
 
     headerfile << "\n";
 
@@ -363,7 +365,9 @@ void GGAnimation::WriteFrameArray(const std::string& outputName, std::ofstream& 
 }
 
 
-void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, std::ofstream& sourceFile)
+void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, 
+                                               std::ofstream& sourceFile,
+                                               const std::string& bank)
 {
     sourceFile << "u8 " << outputName << "VdpLocation;\n\n";
 
@@ -399,14 +403,16 @@ void GGAnimation:: WriteAnimationStructBatched(const std::string& outputName, st
 }
 
 
-void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile)
+void GGAnimation:: WriteAnimationStruct(const std::string& outputName, 
+                                        std::ofstream& sourceFile,
+                                        const std::string& bank)
 {
     sourceFile << "u8 " << outputName << "VdpLocation;\n\n";
 
     if (m_options.mStreamed)
     {
         // final struct
-        sourceFile << "const StreamedAnimation " << outputName << " = \n";
+        sourceFile << "RESOURCE(" << bank << ") const StreamedAnimation " << outputName << " = \n";
         sourceFile << "{\n";
         sourceFile << "    STREAMED_REGULAR_ANIMATION_RESOURCE_TYPE, \n";
         sourceFile << "    (const StreamedAnimationFrame** const)" << outputName << "Frames,\n";
@@ -414,7 +420,7 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
     else
     {
         // final struct
-        sourceFile << "const Animation " << outputName << " = \n";
+        sourceFile << "RESOURCE(" << bank << ") const Animation " << outputName << " = \n";
         sourceFile << "{\n";
         sourceFile << "    REGULAR_ANIMATION_RESOURCE_TYPE, \n";
         sourceFile << "    (const AnimationFrame** const)" << outputName << "Frames,\n";
@@ -433,7 +439,9 @@ void GGAnimation:: WriteAnimationStruct(const std::string& outputName, std::ofst
 }
 
 
-void GGAnimation::WriteGGAnimationSourceFile(const std::string& outputFolder, const std::string& outputName)
+void GGAnimation::WriteGGAnimationSourceFile(const std::string& outputFolder, 
+                                             const std::string& outputName,
+                                             const std::string& bank)
 {
 	std::ofstream sourceFile(outputFolder + outputName + ".c");
 
@@ -451,14 +459,14 @@ void GGAnimation::WriteGGAnimationSourceFile(const std::string& outputFolder, co
         WriteSpritesBatched(outputName, sourceFile);
         WriteFramesBatched(outputName, sourceFile);
 	    WriteFrameArrayBatched(outputName, sourceFile);
-        WriteAnimationStructBatched(outputName, sourceFile);
+        WriteAnimationStructBatched(outputName, sourceFile, bank);
     }
     else
     {
         WriteSprites(outputName, sourceFile);
 	    WriteFrames(outputName, sourceFile);
         WriteFrameArray(outputName, sourceFile);
-        WriteAnimationStruct(outputName, sourceFile);
+        WriteAnimationStruct(outputName, sourceFile, bank);
     }
 
     sourceFile.close();

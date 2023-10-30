@@ -15,7 +15,7 @@ class GGPlaneAnimation
 {
 public:
 	GGPlaneAnimation(LPVOID galeFileHandle, const Options& options);
-	void Write(const std::string& outputFolder, const std::string& outputName);
+	void Write(const std::string& outputFolder, const std::string& outputName, const std::string& bank);
 
 	int GetTileCount() { return m_uniqueTileCount; }
 	const BITMAP& GetGeneralBitmapInfo() { return  m_generalBitmapInfo; }
@@ -24,15 +24,15 @@ private:
 	GGPlaneAnimationFrame* findSameFrame(const GGPlaneAnimationFrame& frame);
 	int findSameFrameIndex(const GGPlaneAnimationFrame& frame);
 
-	void WriteGGPlaneAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName);
-	void WriteGGPlaneAnimationSourceFile(const std::string& outputFolder, const std::string& outputName);
+	void WriteGGPlaneAnimationHeaderFile(const std::string& outputFolder, const std::string& outputName, const std::string& bank);
+	void WriteGGPlaneAnimationSourceFile(const std::string& outputFolder, const std::string& outputName, const std::string& bank);
 	void WriteFrameData(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrameNames(const std::string& outputName, std::ofstream& sourceFile);
 	void WritePalettes(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteTileMaps(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrames(const std::string& outputName, std::ofstream& sourceFile);
 	void WriteFrameArray(const std::string& outputName, std::ofstream& sourceFile);
-	void WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile);
+	void WriteAnimationStruct(const std::string& outputName, std::ofstream& sourceFile, const std::string& bank);
 
 
 

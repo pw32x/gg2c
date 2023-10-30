@@ -15,6 +15,7 @@
 #include "windows.h"
 
 std::string						gOutputFolder;
+std::string                     gBank;
 LPVOID							gGaleFileHandle = NULL;
 DWORD							gNumberOfFrames = 0;
 BITMAP							gGeneralBitmapInfo;
@@ -41,8 +42,17 @@ void parseOptionalParameter(const std::string& parameter)
     }
     else
     {
-        gOutputFolder = parameter;
-        gOutputFolder += "\\";
+        std::string bankFlag = "-bank";
+        int found = parameter.find(bankFlag);
+        if (found != std::string::npos)
+        {
+            gBank = "BANK" + parameter.substr(found + bankFlag.length());
+        }
+        else
+        {
+            gOutputFolder = parameter;
+            gOutputFolder += "\\";
+        }
     }
 }
 
@@ -280,17 +290,17 @@ int main(int argc, char* argv[])
 	        if (options.mBackgroundPlaneAnimation)
 	        {
                 sms::GGPlaneAnimation animation(gGaleFileHandle, options);
-		        animation.Write(gOutputFolder, outputFilename);
+		        animation.Write(gOutputFolder, outputFilename, gBank);
             }
             else if (options.mTileAnimation)
             {
                 sms::GGTileAnimation animation(gGaleFileHandle, options, animationProperties);
-		        animation.Write(gOutputFolder, outputFilename);
+		        animation.Write(gOutputFolder, outputFilename, gBank);
             }
             else
             {
                 sms::GGAnimation animation(gGaleFileHandle, options, animationProperties);
-                animation.Write(gOutputFolder, outputFilename);
+                animation.Write(gOutputFolder, outputFilename, gBank);
             }
         }
         else
