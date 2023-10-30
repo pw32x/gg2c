@@ -136,9 +136,9 @@ void GGAnimation::WriteGGAnimationHeaderFile(const std::string& outputFolder, co
     std::string streamed = m_options.mStreamed ? "Streamed" : "";
 
     if (m_options.mSMSBatchedSprites)
-        headerfile << "extern const " << streamed << "BatchedAnimation " << outputName << ";\n"; 
+        headerfile << "RESOURCE extern const " << streamed << "BatchedAnimation " << outputName << ";\n"; 
     else
-        headerfile << "extern const " << streamed << "Animation " << outputName << ";\n"; 
+        headerfile << "RESOURCE extern const " << streamed << "Animation " << outputName << ";\n"; 
 
     headerfile << "\n";
 

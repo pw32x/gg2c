@@ -98,7 +98,7 @@ void GGPlaneAnimation::WriteGGPlaneAnimationHeaderFile(const std::string& output
     headerfile << "\n";
 
 	// exported types
-    headerfile << "extern const PlaneAnimation " << outputName << ";\n"; 
+    headerfile << "RESOURCE extern const PlaneAnimation " << outputName << ";\n"; 
 
 	/*
 	if (m_options.mFixedBack)

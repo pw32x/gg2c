@@ -139,7 +139,7 @@ void GGTileAnimation::WriteHeaderFile(const std::string& outputFolder, const std
 
 	// exported types
 
-    headerfile << "extern const TileAnimation " << outputName << ";\n"; 
+    headerfile << "RESOURCE extern const TileAnimation " << outputName << ";\n"; 
 
     headerfile << "\n";
 
